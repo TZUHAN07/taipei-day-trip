@@ -78,8 +78,16 @@ def InquireAttraction():
 					split_page=count//12
 					pages=split_page
 				else:
+					split_page=count//12
 					pages=split_page-1
 				print(pages)
+
+				if count==0:
+					errorReturn = {
+						"error": True,
+						"message": "此關鍵字查無資料"
+					}
+					return jsonify(errorReturn), 500
 
 				if page>pages:
 					errorReturn = {
@@ -111,17 +119,19 @@ def InquireAttraction():
 					}
 
 					alldatas.append(datas)
+				print(alldatas)
 
-					nextpage=0
-					if page+1>pages:
-						nextpage=None
-					else:
-						nextpage=page+1
+				
 
-					dataReturn = {
-					'nextPage': nextpage,
-					'data': alldatas
-					}
+				nextpage=0
+				if page+1>pages:
+					nextpage=None
+				else:
+					nextpage=page+1
+				dataReturn = {
+				'nextPage': nextpage,
+				'data': alldatas
+				}
 				return jsonify(dataReturn), 200
  
 				
@@ -131,6 +141,7 @@ def InquireAttraction():
 				cursor.execute("select * from attractions order by id")
 				result=cursor.fetchall()
 				connection_object.close()
+
 				
 				endindex=0
 				if ((page+1)*12>count):
@@ -154,17 +165,23 @@ def InquireAttraction():
 					}
 					alldatas.append(datas)
 
-					nextpage=0
-					if page+1>pages:
-						nextpage=None
-					else:
-						nextpage=page+1
-
-					dataReturn = {
+				nextpage=0
+				if page+1>pages:
+					nextpage=None
+				else:
+					nextpage=page+1
+				dataReturn = {
 					'nextPage': nextpage,
 					'data': alldatas
 				}
 				return jsonify(dataReturn), 200
+		else:
+			errorReturn = {
+				"error": True,
+				"message": "超過有效範圍"
+			}
+			return jsonify(errorReturn), 500
+
 
 	except Error as e:#500 伺服器內部錯誤
 		# print(e)
