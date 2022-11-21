@@ -4,7 +4,9 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.config["JSON_SORT_KEYS"] = False
 
-from mysql import mysqlpassword
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from mysql.connector import pooling
 from mysql.connector import Error
 import mysql.connector 
@@ -13,7 +15,7 @@ import mysql.connector
 dbconfig = {
         "host": "localhost",
         "user":"root",
-        "password": mysqlpassword(),
+        "password": os.getenv("password"),
         "database":"tpdaywebsite",
 }
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(
