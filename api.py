@@ -4,20 +4,21 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.config["JSON_SORT_KEYS"] = False
 
-import os
-from dotenv import load_dotenv
-load_dotenv()
+#import os
+#from dotenv import load_dotenv
+#load_dotenv()
 from mysql.connector import pooling
 from mysql.connector import Error
 import mysql.connector 
 
-
+#password=os.getenv("password")
 dbconfig = {
         "host": "localhost",
         "user":"root",
-        "password": os.getenv("password"),
+        "password": "j610114*",
         "database":"tpdaywebsite",
 }
+
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(
     pool_name="pynative_pool",
     pool_size=5,
@@ -91,7 +92,6 @@ def InquireAttraction():
 				}
 				alldatas.append(datas)
 			#print(alldatas)
-			nextpage=0
 
 			nextpage=0
 			if page+1>pages:
@@ -168,7 +168,6 @@ def InquireAttraction():
 			"error": True,
 			"message": "伺服器內部錯誤"
 		}
-
 		return jsonify(errorReturn), 500
 			
 @app.route("/api/attraction/<attractionId>", methods=["GET"])
@@ -208,9 +207,6 @@ def getApiId(attractionId):
 				dataReturn = {
 					"data": data
 				}
-
-				# print('dataReturn: ', dataReturn)
-
 				return jsonify(dataReturn), 200
 
 
@@ -224,7 +220,7 @@ def getApiId(attractionId):
 			errorReturn = {
 					"error": True,
 					"message": "請輸入有效數值"
-				}
+			}
 			return jsonify(errorReturn), 400
 
 	except Error as e:#500 伺服器內部錯誤
@@ -233,7 +229,6 @@ def getApiId(attractionId):
 			"error": True,
 			"message": "伺服器內部錯誤"
 		}
-
 		return jsonify(errorReturn), 500
 
 @app.route("/api/categories", methods=["GET"])
@@ -266,9 +261,5 @@ def getApiCategory():
 		}
 		return jsonify(errorReturn), 500
 
-
-				
-			
-
-
-app.run(host="0.0.0.0",port=3000,debug=True)
+if __name__ == '__main__':
+    app.run(host="localhost", port=3000, debug=True)
