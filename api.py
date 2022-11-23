@@ -41,16 +41,15 @@ def InquireAttraction():
 		if keyword :
 			connection_object = connection_pool.get_connection()
 			cursor = connection_object.cursor(buffered=True)
-			sql=("select * from attractions where category = %s or name like %s ORDER BY id ")
+			sql=("select count(id) from attractions where category = %s or name like %s")
 			val=(keyword,"%"+keyword+"%")
 			cursor.execute(sql,val)
-			count=cursor.fetchall()
+			count=cursor.fetchone()
 			connection_object.close()
-			#print(result)
-			
-			count=(len(count))
-			print(count)
 
+			count=int(count[0])
+			#print(count)
+			
 			if count==0:
 				errorReturn = {
 					"error": True,
@@ -74,7 +73,7 @@ def InquireAttraction():
 				return jsonify(errorReturn), 500
 			
 			alldatas=[]
-			sql=("select * from attractions where category = %s or name like %s ORDER BY id limit %s,12")
+			sql=("select * from attractions where category = %s or name like %s  limit %s,12")
 			val=(keyword,"%"+keyword+"%",page*12)
 			cursor.execute(sql,val)
 			results=cursor.fetchall()
@@ -134,7 +133,7 @@ def InquireAttraction():
 
 
 			alldatas=[]
-			sql=("select * from attractions order by id  limit %s,12")
+			sql=("select * from attractions  id  limit %s,12")
 			val=(page*12,)
 			cursor.execute(sql,val)
 			results=cursor.fetchall()
