@@ -92,7 +92,7 @@ def InquireAttraction():
 					"images":result[9].split(",")
 				}
 				alldatas.append(datas)
-			print(alldatas)
+			#print(alldatas)
 
 			nextpage=0
 			if page+1>allpages:
@@ -152,7 +152,8 @@ def InquireAttraction():
 					"images":result[9].split(",")
 				}
 				alldatas.append(datas)
-			print(alldatas,"156")
+			#print(alldatas)
+			
 
 			nextpage=0
 			if page+1>allpages:
