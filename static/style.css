@@ -1,0 +1,98 @@
+body {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    
+}
+.top {
+    width:1200px;
+    height:54px;
+    margin-left:  auto;margin-right:  auto;
+    display: flex;
+    /*讓項目水平排列*/
+}
+.top-left{
+    width:150px;
+    height:34px;
+    flex: auto;
+    margin: 10px 10px 10px 10px;
+    font-size: 34px;
+    color:#448899;
+}
+.top-right{
+    flex: none;
+    justify-content: flex-end;
+    margin: 10px 10px 10px 10px;
+    display: flex;
+    
+}
+.top-right-btn{
+    width:65px;
+    height:14px;
+    flex: auto;;
+    align-items: center;
+    display: flex;
+    margin: 10px;
+    font-size: 16px;
+}
+.background{
+    flex: none;
+    position:absolute;
+    *z-index:-1
+   
+}
+.web-banner{
+    width:1200px;
+    margin-left:  auto;margin-right:  auto;
+    color: #F8F8F8;
+    
+}
+.web-title{
+    font-size: 28px;
+    margin: 10px 10px 10px 10px;
+    
+}
+.web-subtitle{
+    
+    font-size: 16px;
+    margin: 10px 10px 10px 10px;
+  
+}
+.form{
+    font-size: 16px;
+    margin: 10px 10px 10px 10px;
+   
+}
+.attraction{
+    display: grid;
+    grid-template-rows:repeat(3,242px) ;
+    grid-template-columns:repeat(4,270px);
+    justify-content: center;
+    align-items: center; 
+    grid-gap:30px;
+}
+
+
+@media(max-width:1200px) {
+    .attraction{
+        display: grid;
+        grid-template-rows:repeat(6,484px)  ;
+        grid-template-columns:repeat(2,540px);
+        justify-content: center;
+        align-items: center; 
+        grid-gap:30px;
+    }
+    
+}
+
+@media(max-width:600px) {
+    .attraction{
+        display: grid;
+        grid-template-rows:repeat(12,484px)  ;
+        grid-template-columns:repeat(1,540px);
+        justify-content: center;
+        align-items: center; 
+        grid-gap:30px;
+    }
+    
+}
