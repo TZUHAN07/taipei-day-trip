@@ -114,7 +114,7 @@ def InquireAttraction():
 			count=cursor.fetchone()
 			connection_object.close()
 
-			count=(count[0])
+			count=int(count[0])
 			print(count)
 
 			if count%12 !=0:
