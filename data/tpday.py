@@ -64,8 +64,11 @@ for data in datas:
     for image in allimages:
         image = image+".jpg"
         path.append(image)
-    
-    allpaths=",".join(path)
+
+    allpaths=json.dumps(path)
+    print(allpaths)
+    #allpaths=",".join(path)
+    #print(allpaths)
 
     try:
         connection_object = connection_pool.get_connection() 

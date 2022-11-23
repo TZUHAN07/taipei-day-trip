@@ -11,6 +11,9 @@ from mysql.connector import pooling
 from mysql.connector import Error
 import mysql.connector 
 
+# 建立Application 物件，可以設定靜態檔案的路徑處理
+app = Flask(__name__, static_folder="static", static_url_path="/")
+
 #password=os.getenv("password")
 dbconfig = {
         "host": "localhost",
@@ -32,20 +35,20 @@ connection_pool = mysql.connector.pooling.MySQLConnectionPool(
 def InquireAttraction():
 	try:
 		page = int(request.args.get("page",0))
-		keyword = request.args.get("keyword")
+		keyword = request.args.get("keyword",None)
 		#print(page, type(page))
 		#print(keyword, type(keyword))	
 		if keyword :
 			connection_object = connection_pool.get_connection()
 			cursor = connection_object.cursor(buffered=True)
-			sql=("select * from attractions where category = %s or name like %s ORDER BY id")
+			sql=("select * from attractions where category = %s or name like %s ORDER BY id ")
 			val=(keyword,"%"+keyword+"%")
 			cursor.execute(sql,val)
-			result=cursor.fetchall()
+			count=cursor.fetchall()
 			connection_object.close()
 			#print(result)
 			
-			count=(len(result))
+			count=(len(count))
 			print(count)
 
 			if count==0:
@@ -56,48 +59,47 @@ def InquireAttraction():
 				return jsonify(errorReturn), 500
 			
 			if count%12 !=0:
-				splitPage=count//12
-				pages=splitPage
+				paging=count//12
+				allpages=paging
 			else:
-				splitPage=count//12
-				pages=splitPage-1
-			print(pages)
+				paging=count//12
+				allpages=paging-1
+			#print(allpages)
 			
-			if page>pages:
+			if page>allpages:
 				errorReturn = {
 					"error": True,
 					"message": "超過有效範圍"
 				}
 				return jsonify(errorReturn), 500
 			
-			endindex=0
-			if ((page+1)*12>count):
-				endindex=count
-			else:
-				endindex=(page+1)*12
-
 			alldatas=[]
-			for i in range(page*12,endindex):
+			sql=("select * from attractions where category = %s or name like %s ORDER BY id limit %s,12")
+			val=(keyword,"%"+keyword+"%",page*12)
+			cursor.execute(sql,val)
+			results=cursor.fetchall()
+			for result in results:
 				datas={
-					"id":result[i][0],
-					"name":result[i][1],
-					"category":result[i][2],
-					"description":result[i][3],		
-					"address":result[i][4],
-					"transport":result[i][5],
-					"mrt":result[i][6],
-					"lat":result[i][7],
-					"lng":result[i]	[8],
-					"images":result[i][9]
+					"id":result[0],
+					"name":result[1],
+					"category":result[2],
+					"description":result[3],		
+					"address":result[4],
+					"transport":result[5],
+					"mrt":result[6],
+					"lat":result[7],
+					"lng":result[8],
+					"images":result[9].split(",")
 				}
 				alldatas.append(datas)
-			#print(alldatas)
+			print(alldatas)
 
 			nextpage=0
-			if page+1>pages:
+			if page+1>allpages:
 				nextpage=None
 			else:
 				nextpage=page+1
+
 			dataReturn = {
 			'nextPage': nextpage,
 			'data': alldatas
@@ -108,50 +110,52 @@ def InquireAttraction():
 		else:
 			connection_object = connection_pool.get_connection()
 			cursor = connection_object.cursor(buffered=True)
-			cursor.execute("select * from attractions order by id")
-			result=cursor.fetchall()
+			cursor.execute("select * from attractions order by id ")
+			count=cursor.fetchall()
 			connection_object.close()
 
-			count=(len(result))
+			count=(len(count))
 			print(count)
 
 			if count%12 !=0:
-				splitPage=count//12
-				pages=splitPage
+				paging=count//12
+				allpages=paging
 			else:
-				splitPage=count//12
-				pages=splitPage-1
-			print(pages)
-			if page>pages:
+				paging=count//12
+				allpages=paging-1
+			print(allpages)
+
+			if page>allpages:
 				errorReturn = {
 					"error": True,
 					"message": "超過有效範圍"
 				}
 				return jsonify(errorReturn), 500
 
-			endindex=0
-			if ((page+1)*12>count):
-				endindex=count
-			else:
-				endindex=(page+1)*12
+
 			alldatas=[]
-			for i in range(page*12,endindex):
+			sql=("select * from attractions order by id  limit %s,12")
+			val=(page*12,)
+			cursor.execute(sql,val)
+			results=cursor.fetchall()
+			for result in results:
 				datas={
-					"id":result[i][0],
-					"name":result[i][1],
-					"category":result[i][2],
-					"description":result[i][3],
-					"address":result[i][4],
-					"transport":result[i][5],
-					"mrt":result[i][6],
-					"lat":result[i][7],
-					"lng":result[i]	[8],
-					"images":result[i][9]
+					"id":result[0],
+					"name":result[1],
+					"category":result[2],
+					"description":result[3],
+					"address":result[4],
+					"transport":result[5],
+					"mrt":result[6],
+					"lat":result[7],
+					"lng":result[8],
+					"images":result[9].split(",")
 				}
 				alldatas.append(datas)
+			print(alldatas,"156")
 
 			nextpage=0
-			if page+1>pages:
+			if page+1>allpages:
 				nextpage=None
 			else:
 				nextpage=page+1
@@ -201,7 +205,7 @@ def getApiId(attractionId):
 					"mrt":resultData[6],
 					"lat":resultData[7],
 					"lng":resultData[8],
-					"images":resultData[9]}
+					"images":resultData[9].split(",")}
 				#print(data )
 
 				dataReturn = {
@@ -245,13 +249,18 @@ def getApiCategory():
 		for datas in resultData:
 			for element in datas:
 				catdatas.append(element)
-		print(catdatas)
+		#print(catdatas)
 
 		noRepeatData=[]
 		for i in catdatas:
 			if i not in noRepeatData:
 				noRepeatData.append(i )
-		return noRepeatData
+
+		dataReturn = {
+					"data": noRepeatData
+				}
+		return jsonify(dataReturn), 200	
+
 
 	except Error as e:#500 伺服器內部錯誤
 		# print(e)
