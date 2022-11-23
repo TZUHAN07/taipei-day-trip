@@ -110,11 +110,11 @@ def InquireAttraction():
 		else:
 			connection_object = connection_pool.get_connection()
 			cursor = connection_object.cursor(buffered=True)
-			cursor.execute("select * from attractions order by id ")
-			count=cursor.fetchall()
+			cursor.execute("select count(id) from attractions ")
+			count=cursor.fetchone()
 			connection_object.close()
 
-			count=(len(count))
+			count=(count[0])
 			print(count)
 
 			if count%12 !=0:
