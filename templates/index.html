@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <title>taipei-day-trip website</title>
-    <link rel="stylesheet"   href="{{ url_for('static',filename='style.css') }}"/>
+    <link rel="stylesheet" type=text/css  href="{{url_for('static', filename='style.css')}}"/>
 </head>
 
 <body>
@@ -17,51 +17,159 @@
     </div>
 
     <div>
-        <div class="background"><img scr="{{ url_for('static', filename='welcome.png') }}" alt="welcome-img"/></div>
         <div class="web-banner">
-            <div class="web-title">輕鬆享受台北一日悠閒</div>
-            <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
-            <div class="form">
-            <form action="/attraction/categories" method="GET">
-                <input type="searchtext" name="searchtext" placeholder="輸入景點名稱"/>
-                <button id="search" onclick="getData();"></button>
-            </form>
+            <div class="background"><img src="{{url_for('static', filename='images/welcome.png')}}" alt="welcome-img"/>
+                <div class =web-text>
+                    <div class="web-title">輕鬆享受台北一日悠閒</div>
+                    <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
+                    <div class="searchbar">
+                            <input type="text" id="keyword" name="keyword" placeholder="輸入景點名稱查詢"/>
+                            <div id="test" class="button" >
+                                <img class="src" src="{{url_for('static', filename='images/icon_search.png')}}" alt="icon_search"/>
+                            </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     <div  class="attraction" id="content">
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-    <div>
-    <div class=footer>COPYRIGHT © 2021 台北一日遊</div>
+    </div>
+    <div id = "test2">click</div>
+    <div class=footer>COPYRIGHT © 2022 台北一日遊</div>
 
     <script>
+        let attractionImg = " ";
+        let attractionName = " ";
+        let attractionCat = " ";
+        let attractionMrt = " ";
+        let page=0;
+        //選擇器設定
+        const keyword = document.getElementById("keyword").value;
+        const footer = document.getElementsByClassName("footer");
+        const test2 =document.getElementById("test2");
+        const test =document.getElementById("test");
+        console.log(test)
+
+        //監聽按鈕
+        test2.addEventListener("click",function (){
+            console.log("click");
+            getKeywordData();
+        })
+        test.addEventListener("click",function (e){
+            e.preventDefault();
+            console.log("click");
+            getKeywordData();
+        })
+        
         
 
+        //利用fetch進行連線並取得資料
+        fetch("http://127.0.0.1:3000/api/attractions")
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                console.log('Success:', data);
+                let resultData= data.data
+                let nextpage=data.nextPage
+                console.log(nextpage)
+                for (let i = 0; i < resultData.length; i++) {
+                        const firstUrl = resultData[i].images[0];
+                        //console.log(firstUrl);
+                        attractionImg= firstUrl
+
+                        const nameTitle = resultData[i].name;
+                        attractionName = nameTitle;
+                        //console.log(nameTitle);
+
+                        const catTitle = resultData[i].category;
+                        attractionCat = catTitle;
+                        //console.log(catTitle);
+                        const mrtTitle = resultData[i].mrt;
+                        attractionMrt = mrtTitle;
+                        //console.log(mrtTitle);
+
+                        newAttractions(attractionImg,attractionName,attractionCat,attractionMrt);
+                }
+            
+       
+        })
+        
+        function newAttractions() {
+            console.log(attractionImg,attractionName,attractionCat,attractionMrt)
+            
+            let attractionPicDiv = document.createElement("div");
+            attractionPicDiv.classList.add("attraction-pic");
+            
+            
+            let attractionNameDiv = document.createElement("div");
+            attractionNameDiv.classList.add("attraction-name");
+            let attractionCatMrtDiv = document.createElement("div");
+            attractionCatMrtDiv.classList.add("attraction-cat-mrt");
+            let attractionCatDiv = document.createElement("div");
+            attractionCatDiv.classList.add("cat");
+            let attractionMrtDiv = document.createElement("div");
+            attractionMrtDiv.classList.add("mrt");
+            
+            let attractionImgDiv = document.createElement("div");
+            attractionImgDiv.classList.add("attraction-img");
+            let viewpoint = document.createElement("img");
+            viewpoint.setAttribute("src", attractionImg);
+            viewpoint.setAttribute("alt", "attraction-img")  
+
+            const content = document.getElementById("content")
+
+            content.appendChild(attractionPicDiv).appendChild(attractionImgDiv).appendChild(viewpoint);
+            content.appendChild(attractionPicDiv).appendChild(attractionCatMrtDiv);
+            
+            let nametext = document.createTextNode(attractionName);
+            attractionNameDiv.appendChild(nametext);
+
+            attractionImgDiv.appendChild(attractionNameDiv);
+  
+
+            attractionCatMrtDiv.appendChild(attractionCatDiv);
+            let cattext = document.createTextNode(attractionCat);
+            attractionCatMrtDiv.appendChild(cattext);
+
+            attractionCatMrtDiv.appendChild(attractionMrtDiv);
+            let mrttext = document.createTextNode(attractionMrt);
+            attractionCatMrtDiv.appendChild(mrttext);
+        } 
+
+        function getKeywordData(){
+            const keyword = document.getElementById("keyword").value;
+            fetch("http://127.0.0.1:3000/api/attractions?keyword="+keyword)
+                .then(function (response) {
+                    return response.json();
+                }).then(function (data) {
+                    console.log( data);
+                    let resultData= data.data
+                    let nextpage=data.nextPage
+                    console.log(nextpage)
+                    for (let i = 0; i < resultData.length; i++) {
+                        const firstUrl = resultData[i].images[0];
+                        console.log(firstUrl);
+                        attractionImg= firstUrl
+
+                        const nameTitle = resultData[i].name;
+                        attractionName = nameTitle;
+                        console.log(nameTitle);
+
+                        const catTitle = resultData[i].category;
+                        attractionCat = catTitle;
+                        console.log(catTitle);
+                        const mrtTitle = resultData[i].mrt;
+                        attractionMrt = mrtTitle;
+                        console.log(mrtTitle);
+
+                        newAttractions(attractionImg,attractionName,attractionCat,attractionMrt);
+                    }
+                });
+               
+            }
     </script>
 
 </body>
 </html>
+
