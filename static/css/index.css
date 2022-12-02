@@ -5,14 +5,16 @@ body {
 }
 nav {
     position: sticky; 
-    display: flex; 
     top: 0px;
-    width:1200px;
     height:54px;
-    margin:auto;
-    justify-content: space-between;
     background-color: #FFFFFF;
     z-index: 99;
+}
+.top{
+    display: flex; 
+    width:1200px;
+    margin:auto;
+    justify-content: space-between;
 }
 .top-left{
     width:150px;
@@ -228,6 +230,10 @@ nav {
     nav {
         width:auto;
     }
+    .top{
+        width:auto;
+    }
+    
     .background-img{
         height:400px;
     }
