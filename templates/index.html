@@ -4,172 +4,43 @@
 <head>
     <meta charset="utf-8" />
     <title>taipei-day-trip website</title>
-    <link rel="stylesheet" type=text/css  href="{{url_for('static', filename='style.css')}}"/>
+    <link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/index.css')}}" />
+
 </head>
 
 <body>
-    <div class="top">
-        <div class="top-left">台北一日遊</div>
-        <div class="top-right">
-            <div class="top-right-btn">預定行程</div>
-            <div class="top-right-btn">登入註冊</div>
-        </div>
-    </div>
-
-    <div>
-        <div class="web-banner">
-            <div class="background"><img src="{{url_for('static', filename='images/welcome.png')}}" alt="welcome-img"/>
-                <div class =web-text>
+        <nav>
+            <div class="top-left">台北一日遊</div>
+            <div class="top-right">
+                <div class="top-right-btn1">預定行程</div>
+                <div class="top-right-btn2">登入/註冊</div>
+            </div>
+        </nav>
+        <div class="web-container">
+            <div class="web-banner">
+                <img class="background-img" src="{{url_for('static', filename='images/welcome.png')}}" alt="welcome-img" />
+            </div>
+            <div class="web-text-container">
+                <div class="web-text">
                     <div class="web-title">輕鬆享受台北一日悠閒</div>
                     <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
                     <div class="searchbar">
-                            <input type="text" id="keyword" name="keyword" placeholder="輸入景點名稱查詢"/>
-                            <div id="test" class="button" >
-                                <img class="src" src="{{url_for('static', filename='images/icon_search.png')}}" alt="icon_search"/>
-                            </div>
+                        <input class="input" id="keyword" type="text" name="keyword" placeholder="輸入景點名稱查詢" />
+                        <div class="button" id="button" type="button">
+                            <img class="button-img" src="{{url_for('static', filename='images/icon_search.png')}}"
+                                alt="icon_search" />
+                        </div>
+                    </div>
+                    <div class="list" id="list">
+                        <div class="searchlist hide" id="searchlist"></div>
                     </div>
                 </div>
             </div>
         </div>
+    <div class="attraction" id="content">
     </div>
-    <div  class="attraction" id="content">
-    </div>
-    <div id = "test2">click</div>
-    <div class=footer>COPYRIGHT © 2022 台北一日遊</div>
-
-    <script>
-        let attractionImg = " ";
-        let attractionName = " ";
-        let attractionCat = " ";
-        let attractionMrt = " ";
-        let page=0;
-        //選擇器設定
-        const keyword = document.getElementById("keyword").value;
-        const footer = document.getElementsByClassName("footer");
-        const test2 =document.getElementById("test2");
-        const test =document.getElementById("test");
-        console.log(test)
-
-        //監聽按鈕
-        test2.addEventListener("click",function (){
-            console.log("click");
-            getKeywordData();
-        })
-        test.addEventListener("click",function (e){
-            e.preventDefault();
-            console.log("click");
-            getKeywordData();
-        })
-        
-        
-
-        //利用fetch進行連線並取得資料
-        fetch("http://127.0.0.1:3000/api/attractions")
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                console.log('Success:', data);
-                let resultData= data.data
-                let nextpage=data.nextPage
-                console.log(nextpage)
-                for (let i = 0; i < resultData.length; i++) {
-                        const firstUrl = resultData[i].images[0];
-                        //console.log(firstUrl);
-                        attractionImg= firstUrl
-
-                        const nameTitle = resultData[i].name;
-                        attractionName = nameTitle;
-                        //console.log(nameTitle);
-
-                        const catTitle = resultData[i].category;
-                        attractionCat = catTitle;
-                        //console.log(catTitle);
-                        const mrtTitle = resultData[i].mrt;
-                        attractionMrt = mrtTitle;
-                        //console.log(mrtTitle);
-
-                        newAttractions(attractionImg,attractionName,attractionCat,attractionMrt);
-                }
-            
-       
-        })
-        
-        function newAttractions() {
-            console.log(attractionImg,attractionName,attractionCat,attractionMrt)
-            
-            let attractionPicDiv = document.createElement("div");
-            attractionPicDiv.classList.add("attraction-pic");
-            
-            
-            let attractionNameDiv = document.createElement("div");
-            attractionNameDiv.classList.add("attraction-name");
-            let attractionCatMrtDiv = document.createElement("div");
-            attractionCatMrtDiv.classList.add("attraction-cat-mrt");
-            let attractionCatDiv = document.createElement("div");
-            attractionCatDiv.classList.add("cat");
-            let attractionMrtDiv = document.createElement("div");
-            attractionMrtDiv.classList.add("mrt");
-            
-            let attractionImgDiv = document.createElement("div");
-            attractionImgDiv.classList.add("attraction-img");
-            let viewpoint = document.createElement("img");
-            viewpoint.setAttribute("src", attractionImg);
-            viewpoint.setAttribute("alt", "attraction-img")  
-
-            const content = document.getElementById("content")
-
-            content.appendChild(attractionPicDiv).appendChild(attractionImgDiv).appendChild(viewpoint);
-            content.appendChild(attractionPicDiv).appendChild(attractionCatMrtDiv);
-            
-            let nametext = document.createTextNode(attractionName);
-            attractionNameDiv.appendChild(nametext);
-
-            attractionImgDiv.appendChild(attractionNameDiv);
-  
-
-            attractionCatMrtDiv.appendChild(attractionCatDiv);
-            let cattext = document.createTextNode(attractionCat);
-            attractionCatMrtDiv.appendChild(cattext);
-
-            attractionCatMrtDiv.appendChild(attractionMrtDiv);
-            let mrttext = document.createTextNode(attractionMrt);
-            attractionCatMrtDiv.appendChild(mrttext);
-        } 
-
-        function getKeywordData(){
-            const keyword = document.getElementById("keyword").value;
-            fetch("http://127.0.0.1:3000/api/attractions?keyword="+keyword)
-                .then(function (response) {
-                    return response.json();
-                }).then(function (data) {
-                    console.log( data);
-                    let resultData= data.data
-                    let nextpage=data.nextPage
-                    console.log(nextpage)
-                    for (let i = 0; i < resultData.length; i++) {
-                        const firstUrl = resultData[i].images[0];
-                        console.log(firstUrl);
-                        attractionImg= firstUrl
-
-                        const nameTitle = resultData[i].name;
-                        attractionName = nameTitle;
-                        console.log(nameTitle);
-
-                        const catTitle = resultData[i].category;
-                        attractionCat = catTitle;
-                        console.log(catTitle);
-                        const mrtTitle = resultData[i].mrt;
-                        attractionMrt = mrtTitle;
-                        console.log(mrtTitle);
-
-                        newAttractions(attractionImg,attractionName,attractionCat,attractionMrt);
-                    }
-                });
-               
-            }
-    </script>
-
+    <div class="footer" id="footer">COPYRIGHT © 2022 台北一日遊</div>
+    <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>
-</html>
 
+</html>
