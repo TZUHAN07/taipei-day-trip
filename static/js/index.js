@@ -99,13 +99,13 @@ function newAttractions() {
     let nametext = document.createTextNode(attractionName)
     attractionNameDiv.appendChild(nametext)
     attractionImgDiv.appendChild(attractionNameDiv)
-    attractionCatMrtDiv.appendChild(attractionCatDiv)
-    let cattext = document.createTextNode(attractionCat)
-    attractionCatMrtDiv.appendChild(cattext)
-
+ 
     attractionCatMrtDiv.appendChild(attractionMrtDiv)
     let mrttext = document.createTextNode(attractionMrt)
     attractionCatMrtDiv.appendChild(mrttext)
+    attractionCatMrtDiv.appendChild(attractionCatDiv)
+    let cattext = document.createTextNode(attractionCat)
+    attractionCatMrtDiv.appendChild(cattext)
 }
 
 // fetch 連線json資料 搜尋景點

@@ -213,11 +213,11 @@ nav {
     border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;
     line-height: 13px;
 }
-.cat{
+.mrt{
     flex: none;
     margin:10px 10px,10px,10px;
 }
-.mrt{
+.cat{
     flex: auto;
     justify-content: flex-end;
     margin:10px 10px,10px,10px;  
