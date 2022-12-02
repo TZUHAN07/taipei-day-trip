@@ -184,7 +184,8 @@ observer.observe(footer);
 
 
 let ListItems = " ";
-fetch("http://127.0.0.1:3000/api/categories")
+fetch(`/api/categories`
+)
     .then(function (response) {
         return response.json()
     }).then(function (data) {
