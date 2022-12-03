@@ -50,13 +50,6 @@ def InquireAttraction():
 			count=int(count[0])
 			#print(count)
 			
-			if count==0:
-				errorReturn = {
-					"error": True,
-					"message": "此關鍵字查無資料"
-				}
-				return jsonify(errorReturn), 500
-			
 			if count%12 !=0:
 				paging=count//12
 				allpages=paging
@@ -64,13 +57,6 @@ def InquireAttraction():
 				paging=count//12
 				allpages=paging-1
 			#print(allpages)
-			
-			if page>allpages:
-				errorReturn = {
-					"error": True,
-					"message": "超過有效範圍"
-				}
-				return jsonify(errorReturn), 500
 			
 			alldatas=[]
 			sql=("select * from attractions where category = %s or name like %s  limit %s,12")
@@ -114,7 +100,7 @@ def InquireAttraction():
 			connection_object.close()
 
 			count=int(count[0])
-			print(count)
+			# print(count)
 
 			if count%12 !=0:
 				paging=count//12
@@ -123,14 +109,6 @@ def InquireAttraction():
 				paging=count//12
 				allpages=paging-1
 			print(allpages)
-
-			if page>allpages:
-				errorReturn = {
-					"error": True,
-					"message": "超過有效範圍"
-				}
-				return jsonify(errorReturn), 500
-
 
 			alldatas=[]
 			sql=("select * from attractions  id  limit %s,12")

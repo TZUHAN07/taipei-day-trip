@@ -1,67 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" >
 
 <head>
     <meta charset="utf-8" />
-    <title>taipei-day-trip website</title>
-    <link rel="stylesheet"   href="{{ url_for('static',filename='style.css') }}"/>
+    <title>{% block title %}taipei-day-trip website{% endblock %}</title>
+    <link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/index.css')}}" />
+
 </head>
 
 <body>
-    <div class="top">
-        <div class="top-left">台北一日遊</div>
-        <div class="top-right">
-            <div class="top-right-btn">預定行程</div>
-            <div class="top-right-btn">登入註冊</div>
-        </div>
-    </div>
-
-    <div>
-        <div class="background"><img scr="{{ url_for('static', filename='welcome.png') }}" alt="welcome-img"/></div>
-        <div class="web-banner">
-            <div class="web-title">輕鬆享受台北一日悠閒</div>
-            <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
-            <div class="form">
-            <form action="/attraction/categories" method="GET">
-                <input type="searchtext" name="searchtext" placeholder="輸入景點名稱"/>
-                <button id="search" onclick="getData();"></button>
-            </form>
+        <nav>
+            <div class="top">
+                <div class="top-left">台北一日遊</div>
+                <div class="top-right">
+                    <div class="top-right-btn1">預定行程</div>
+                    <div class="top-right-btn2">登入/註冊</div>
+                </div>
+            </div>
+        </nav>
+        <div class="web-container">
+            <div class="web-banner">
+                <img class="background-img" src="{{url_for('static', filename='images/welcome.png')}}" alt="welcome-img" />
+            </div>
+            <div class="web-text-container">
+                <div class="web-text">
+                    <div class="web-title">輕鬆享受台北一日悠閒</div>
+                    <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
+                    <div class="searchbar">
+                        <input class="input" id="keyword" type="text" name="keyword" placeholder="輸入景點名稱查詢" />
+                        <div class="button" id="button" type="button">
+                            <img class="button-img" src="{{url_for('static', filename='images/icon_search.png')}}"
+                                alt="icon_search" />
+                        </div>
+                    </div>
+                    <div class="list" id="list">
+                        <div class="searchlist hide" id="searchlist"></div>
+                    </div>
+                </div>
             </div>
         </div>
+    <div class="attraction" id="content">
     </div>
-    <div  class="attraction" id="content">
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-        <div class="attraction-pic" id="attraction-pic">
-            <img class="attraction-img" src="" alt="attraction-img"/>
-            <div class="attraction-name"></div>
-            <div class="attraction-cat-mrt"></div>
-        </div>
-    <div>
-    <div class=footer>COPYRIGHT © 2021 台北一日遊</div>
-
-    <script>
-        
-
-    </script>
-
+    <div class="footer" id="footer">COPYRIGHT © 2022 台北一日遊</div>
+    <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/index.js')}}"></script>
 </body>
+
 </html>
