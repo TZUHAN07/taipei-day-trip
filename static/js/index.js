@@ -13,7 +13,7 @@ const search = document.getElementById("keyword")
 
 
 
-//監聽按鈕
+//監聽btn,取得景點資料
 button.addEventListener("click", function () {
     // console.log("click")
     nextpage = 0;
@@ -124,7 +124,7 @@ function getKeywordData(searching) {
             let resultData = data.data
             nextpage = data.nextPage
 
-            if (resultData.length !== 0) {
+            if (resultData.length !== 0 ) {
                 //console.log(resultData.length)
                 for (let i = 0; i < resultData.length; i++) {
                     const firstUrl = resultData[i].images[0]
@@ -144,7 +144,7 @@ function getKeywordData(searching) {
 
                     newAttractions(attractionImg, attractionName, attractionCat, attractionMrt)
                 }
-            } else {
+            }else{
                 let content = document.getElementById("content")
                 let not_data = document.createElement("div")
                 not_data.textContent = "找不到「 " + keyword + "」的相關資料"
@@ -152,6 +152,7 @@ function getKeywordData(searching) {
             }
 
         }).catch(function (err) {
+            console.log(err)
             console.log("錯誤訊息", err)
         })
 }
