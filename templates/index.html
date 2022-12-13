@@ -3,46 +3,72 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>{% block title %}taipei-day-trip website{% endblock %}</title>
+    <title>{% block title %}台北一日遊{% endblock %}</title>
+    {% block head %}
     <link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/index.css')}}" />
-
+    {% endblock %}
 </head>
 
 <body>
-        <nav>
-            <div class="top">
-                <div class="top-left">台北一日遊</div>
-                <div class="top-right">
-                    <div class="top-right-btn1">預定行程</div>
-                    <div class="top-right-btn2">登入/註冊</div>
-                </div>
-            </div>
-        </nav>
-        <div class="web-container">
-            <div class="web-banner">
-                <img class="background-img" src="{{url_for('static', filename='images/welcome.png')}}" alt="welcome-img" />
-            </div>
-            <div class="web-text-container">
-                <div class="web-text">
-                    <div class="web-title">輕鬆享受台北一日悠閒</div>
-                    <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
-                    <div class="searchbar">
-                        <input class="input" id="keyword" type="text" name="keyword" placeholder="輸入景點名稱查詢" />
-                        <div class="button" id="button" type="button">
-                            <img class="button-img" src="{{url_for('static', filename='images/icon_search.png')}}"
-                                alt="icon_search" />
-                        </div>
-                    </div>
-                    <div class="list" id="list">
-                        <div class="searchlist hide" id="searchlist"></div>
-                    </div>
-                </div>
+    <nav>
+        <div class="top">
+            <div class="top-left"><b>台北一日遊</b></div>
+            <div class="top-right">
+                <div class="top-right-btn1">預定行程</div>
+                <div class="top-right-btn2">登入/註冊</div>
             </div>
         </div>
-    <div class="attraction" id="content">
+    </nav>
+    {% block main %}
+    <div class="web-container">
+        <div class="web-banner">
+            <img class="background-img" src="{{url_for('static', filename='images/welcome.png')}}" alt="welcome-img" />
+        </div>
+        <div class="web-text-container">
+            <div class="web-text">
+                <div class="web-title"><b>輕鬆享受台北一日悠閒</b></div>
+                <div class="web-subtitle">探索每個角落，體驗城市的深度旅遊行程</div>
+                <div class="searchbar">
+                    <input class="input" id="keyword" type="text" name="keyword" placeholder="輸入景點名稱查詢" />
+                    <div class="button" id="button" type="button">
+                        <img class="button-img" src="{{url_for('static', filename='images/icon_search.png')}}"
+                            alt="icon_search" />
+                    </div>
+                </div>
+                <div class="list" id="list">
+                    <div class="searchlist hide" id="searchlist"></div>
+                </div>
+            </div>
+            <div class="verify hide">
+                <div>登入會員帳號</div>
+                <input type="text" name="email" id="email" class="login_name " placeholder="輸入電子信箱"/>
+                <br />
+                <input type="password" name="password" id="password" class="login_password " placeholder="輸入密碼" />
+                <br />
+                <button onclick="login()">登入帳戶</button>
+                <br />
+                <div>還沒有帳戶？點此註冊</div>
+                
+            </div>
+            <div class="verify">
+                <div>註冊會員帳號</div>
+                <input type="text" name="email" id="email" class="register_name " placeholder="輸入電子信箱"/>
+                <br />
+                <input type="password" name="password" id="password" class="register_password " placeholder="輸入密碼" />
+                <br />
+                <button onclick="login()">登入帳戶</button>
+                <br />
+                <div>已經有帳戶了？點此註冊</div>
+            </div>
+        </div>
     </div>
+    <div class="attraction" id="content"></div>
+    {% endblock %}
     <div class="footer" id="footer">COPYRIGHT © 2022 台北一日遊</div>
+    
+    {% block script %}
     <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/index.js')}}"></script>
+    {% endblock %}
 </body>
 
 </html>

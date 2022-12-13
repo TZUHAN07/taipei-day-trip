@@ -2,6 +2,7 @@ let attractionImg = " "
 let attractionName = " "
 let attractionCat = " "
 let attractionMrt = " "
+let attractionId =" "
 let nextpage = 0
 let catkeyword =" "
 
@@ -10,27 +11,21 @@ const content = document.getElementById("content")
 const button = document.getElementById("button")
 const search = document.getElementById("keyword")
 
-
-
-
 //監聽btn,取得景點資料
 button.addEventListener("click", function () {
-    // console.log("click")
+    console.log("click")
     nextpage = 0;
     content.innerHTML = " "
-        getKeywordData(true)
+    getKeywordData(true)
 })
 //監聽input，點擊時跳出視窗
 search.addEventListener("click", function () {
     document.getElementById("searchlist").classList.add("show")
 
     const catkeyword=document.getElementsByClassName("searchlistItems")
-    //console.log(catkeyword)
     
     for (const elem of catkeyword) {
-        //console.log(elem.textContent)
         elem.addEventListener("click", function () {
-            console.log("click",elem)
             inputValue()
         })
 
@@ -42,17 +37,8 @@ search.addEventListener("click", function () {
             search.value=str 
         }
     }
-   
-    //catkeyword.forEach(function(elem) {
-    //    console.log(elem);
-    //    elem.addEventListener("click", function() {
-    //       
-    //    });
-    //});
-
-
 })
-
+//點擊其他地方，彈跳框收起來
 document.addEventListener("click", (event) => {
     let list = document.getElementById("list")
     let search = document.getElementById("keyword")
@@ -65,19 +51,17 @@ document.addEventListener("click", (event) => {
   
 })
 
-
-
-
 getKeywordData(true)
 
 //佈局景點的div
-function newAttractions() {
-    //console.log(attractionImg,attractionName,attractionCat,attractionMrt)
-
-
+function newAttractions(urlId) {
+    // let urlId=attractionId
     let attractionPicDiv = document.createElement("div")
     attractionPicDiv.classList.add("attraction-pic")
-
+    
+    attractionPicDiv.onclick = function(){
+        location.href=`/attraction/${urlId}`
+    }
 
     let attractionNameDiv = document.createElement("div")
     attractionNameDiv.classList.add("attraction-name")
@@ -94,6 +78,7 @@ function newAttractions() {
     viewpoint.setAttribute("src", attractionImg)
     viewpoint.setAttribute("alt", "attraction-img")
 
+
     content.appendChild(attractionPicDiv).appendChild(attractionImgDiv).appendChild(viewpoint)
     content.appendChild(attractionPicDiv).appendChild(attractionCatMrtDiv)
     let nametext = document.createTextNode(attractionName)
@@ -106,43 +91,41 @@ function newAttractions() {
     attractionCatMrtDiv.appendChild(attractionCatDiv)
     let cattext = document.createTextNode(attractionCat)
     attractionCatMrtDiv.appendChild(cattext)
+
 }
 
 // fetch 連線json資料 搜尋景點
 function getKeywordData(searching) {
     let api = "";
     const keyword = document.getElementById("keyword").value
+    console.log(keyword)
     if (searching) {
         api = `/api/attractions?page=${nextpage}&keyword=${keyword}`
     } else {
         api = `/api/attractions?page=${nextpage}`
     }
+    console.log(api)
     fetch(api)
         .then(function (response) {
             return response.json()
         }).then(function (data) {
+            console.log(data)
             let resultData = data.data
             nextpage = data.nextPage
-
             if (resultData.length !== 0 ) {
-                //console.log(resultData.length)
+                console.log(resultData.length)
                 for (let i = 0; i < resultData.length; i++) {
                     const firstUrl = resultData[i].images[0]
-                    //console.log(firstUrl)
                     attractionImg = firstUrl
-
                     const nameTitle = resultData[i].name
                     attractionName = nameTitle
-                    //console.log(nameTitle)
-
                     const catTitle = resultData[i].category
                     attractionCat = catTitle
-                    //console.log(catTitle)
                     const mrtTitle = resultData[i].mrt
                     attractionMrt = mrtTitle
-                    //console.log(mrtTitle)
-
-                    newAttractions(attractionImg, attractionName, attractionCat, attractionMrt)
+                    const id =resultData[i].id
+                    
+                    newAttractions(id)
                 }
             }else{
                 let content = document.getElementById("content")
@@ -151,8 +134,8 @@ function getKeywordData(searching) {
                 content.appendChild(not_data)
             }
 
-        }).catch(function (err) {
-            console.log(err)
+        })
+        .catch(function (err) {
             console.log("錯誤訊息", err)
         })
 }
@@ -190,19 +173,15 @@ fetch(`/api/categories`
     .then(function (response) {
         return response.json()
     }).then(function (data) {
-        //console.log( data);
         let catData = data.data;
-        //console.log(catData);
         for (let i = 0; i < catData.length; i++) {
             const searchListItem = data.data[i];
-            //console.log(searchListItem)
             ListItems = searchListItem
             newListItem(ListItems)
         }
     })
 
 function newListItem() {
-    //console.log(ListItems)
     let searchlistDiv = document.createElement("div")
     searchlistDiv.classList.add("searchlistItems")
     searchlistDiv.setAttribute("id", "searchlistItems")
