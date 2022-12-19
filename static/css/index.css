@@ -3,6 +3,10 @@ body {
     padding: 0 auto;
     position: relative;   
 }
+.opacity{
+    background: #000000;
+    opacity: 0.25;
+}
 nav {
     position: sticky; 
     top: 0px;
@@ -21,7 +25,7 @@ nav {
     height:34px;
     flex: auto;
     margin: 10px;
-    font-size: 34px;
+    font-size: 30px;
     line-height: 34px;
     color:#448899;
     cursor: pointer; 
@@ -32,7 +36,7 @@ nav {
     display: flex;
     color: #757575;
 }
-.top-right-btn1{
+.top-right-tourbook{
     width:64px;
     height:14px;
     margin: 10px;
@@ -40,7 +44,7 @@ nav {
     line-height: 13px;
     cursor: pointer; 
 }
-.top-right-btn2{
+.login-out{
     width:72px;
     height:14px;
     margin: 10px;
@@ -50,9 +54,7 @@ nav {
 }
 .web-container{
     position:relative;
-}
-.verify{
-    display:none
+    justify-content: center;
 }
 .web-banner{
     width:100%;
@@ -65,6 +67,7 @@ nav {
 }
 .web-text-container{
     position:absolute;
+    justify-content: center;
     top:0;
     display:flex;
     width:100%;
@@ -105,8 +108,7 @@ nav {
     padding-left:10px;padding-right:10px;
     padding-top:0px;padding-bottom:0px;
     outline: none;
-    border: none;
-    
+    border: none;  
 }
 
 .button{

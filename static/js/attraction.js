@@ -15,7 +15,10 @@ function timeChoose() {
         price.textContent = "新台幣 2500 元"
     })
 }
-
+const taipeibtn = document.getElementById("taipeibtn")
+        taipeibtn.onclick = function(){
+            location.href=`/`
+        }
 
 const viewimg = document.getElementsByClassName("viewimg")[0]
 const viewtext_name = document.getElementsByClassName("viewtext-name")[0]
