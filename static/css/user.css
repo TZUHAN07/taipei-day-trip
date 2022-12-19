@@ -1,0 +1,86 @@
+.black_background{
+    background: #000000;
+    opacity: 0.25;
+}
+.hide{
+    display:none;
+}
+.show{
+    display:flex;
+}
+.transition{
+    transition:  0.5 ease;
+}
+.verify_container{
+    position: absolute;
+    display:flex;
+    top:26px;
+    justify-content: center; 
+    color: #666666;
+    z-index: 99;
+}
+.verify{
+    position: relative;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 60px #AAAAAA;
+    border-radius: 6px;
+    text-align: center;
+} 
+.verify_login{
+    width: 340px;
+    height: 275px;
+}
+.verify_register{
+    width: 340px;
+    height: 332px;
+}
+.top-bar{
+    /* position: absolute; */
+    height: 10px;
+    background: linear-gradient(270deg, #337788 0%, #66AABB 100%);
+    border-top-left-radius: 5px;border-top-right-radius: 5px;
+}
+.verify_title{
+    margin:15px;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 24px;
+    text-align: center;
+}
+.verify_input{
+    outline: none;
+    border: none;
+    width: 280px;
+    height: 17px;
+    padding:15px;
+    margin:5px 15px;
+    background: #FFFFFF;
+    border: 1px solid #CCCCCC;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+}
+.verify_btn{
+    display: flex;
+    color:#FFFFFF;
+    background: #448899;
+    border-radius: 5px;
+    outline: none;
+    border: none;
+    justify-content:center;
+    align-items: center;
+    cursor: pointer; 
+    width: 310px;
+    height: 47px;
+    font-weight: 400;
+    font-size: 19px;
+    line-height: 16px;
+}
+.verify_hint{
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 13px;
+    text-align: center;
+    margin:10px  15px 15px 15px;
+}
