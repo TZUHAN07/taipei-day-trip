@@ -24,7 +24,7 @@ nav {
     width:150px;
     height:34px;
     flex: auto;
-    margin: 10px;
+    margin: 10px 0px 10px 10px;
     font-size: 30px;
     line-height: 34px;
     color:#448899;
@@ -39,7 +39,7 @@ nav {
 .top-right-tourbook{
     width:64px;
     height:14px;
-    margin: 10px;
+    margin: 10px 10px 10px 0px;
     font-size: 16px;
     line-height: 13px;
     cursor: pointer; 
@@ -47,7 +47,7 @@ nav {
 .login-out{
     width:72px;
     height:14px;
-    margin: 10px;
+    margin: 10px 0px 10px 10px;
     font-size: 16px;
     line-height: 13px;
     cursor: pointer; 
