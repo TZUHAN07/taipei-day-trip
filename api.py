@@ -4,9 +4,9 @@ app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.config["JSON_SORT_KEYS"] = False
 
-#import os
-#from dotenv import load_dotenv
-#load_dotenv()
+import os
+from dotenv import load_dotenv
+
 from mysql.connector import pooling
 from mysql.connector import Error
 import mysql.connector 
@@ -14,11 +14,12 @@ import mysql.connector
 # 建立Application 物件，可以設定靜態檔案的路徑處理
 app = Flask(__name__, static_folder="static", static_url_path="/")
 
-#password=os.getenv("password")
+load_dotenv()
+password = os.getenv("password")
 dbconfig = {
         "host": "localhost",
         "user":"root",
-        "password": "j610114*",
+        "password": password,
         "database":"tpdaywebsite",
 }
 
@@ -36,8 +37,7 @@ def InquireAttraction():
 	try:
 		page = int(request.args.get("page",0))
 		keyword = request.args.get("keyword",None)
-		#print(page, type(page))
-		#print(keyword, type(keyword))	
+
 		if keyword :
 			connection_object = connection_pool.get_connection()
 			cursor = connection_object.cursor(buffered=True)
@@ -48,7 +48,6 @@ def InquireAttraction():
 			connection_object.close()
 
 			count=int(count[0])
-			#print(count)
 			
 			if count%12 !=0:
 				paging=count//12
@@ -56,13 +55,13 @@ def InquireAttraction():
 			else:
 				paging=count//12
 				allpages=paging-1
-			#print(allpages)
 			
 			alldatas=[]
 			sql=("select * from attractions where category = %s or name like %s  limit %s,12")
 			val=(keyword,"%"+keyword+"%",page*12)
 			cursor.execute(sql,val)
 			results=cursor.fetchall()
+			# connection_object.close()
 			for result in results:
 				datas={
 					"id":result[0],
@@ -77,7 +76,6 @@ def InquireAttraction():
 					"images":result[9].split(",")
 				}
 				alldatas.append(datas)
-			#print(alldatas)
 
 			nextpage=0
 			if page+1>allpages:
@@ -100,7 +98,6 @@ def InquireAttraction():
 			connection_object.close()
 
 			count=int(count[0])
-			# print(count)
 
 			if count%12 !=0:
 				paging=count//12
@@ -108,7 +105,6 @@ def InquireAttraction():
 			else:
 				paging=count//12
 				allpages=paging-1
-			print(allpages)
 
 			alldatas=[]
 			sql=("select * from attractions  id  limit %s,12")
@@ -129,8 +125,6 @@ def InquireAttraction():
 					"images":result[9].split(",")
 				}
 				alldatas.append(datas)
-			#print(alldatas)
-			
 
 			nextpage=0
 			if page+1>allpages:
@@ -145,7 +139,6 @@ def InquireAttraction():
 			return jsonify(dataReturn), 200		
 
 	except Error as e:#500 伺服器內部錯誤
-		# print(e)
 		errorReturn = {
 			"error": True,
 			"message": "伺服器內部錯誤"
@@ -171,7 +164,7 @@ def getApiId(attractionId):
 				cursor = connection_object.cursor()
 				cursor.execute("select * from attractions where id = %s ", (attractionId,) )
 				resultData=cursor.fetchone()
-				#print(resultData)
+				connection_object.close()
 
 				data ={
 					"id":resultData[0],
@@ -184,7 +177,6 @@ def getApiId(attractionId):
 					"lat":resultData[7],
 					"lng":resultData[8],
 					"images":resultData[9].split(",")}
-				#print(data )
 
 				dataReturn = {
 					"data": data
@@ -206,7 +198,6 @@ def getApiId(attractionId):
 			return jsonify(errorReturn), 400
 
 	except Error as e:#500 伺服器內部錯誤
-		# print(e)
 		errorReturn = {
 			"error": True,
 			"message": "伺服器內部錯誤"
@@ -221,13 +212,11 @@ def getApiCategory():
 		cursor.execute("select category from attractions  " )
 		resultData=cursor.fetchall()
 		connection_object.close()
-		#print(resultData)
 
 		catdatas=[]
 		for datas in resultData:
 			for element in datas:
 				catdatas.append(element)
-		#print(catdatas)
 
 		noRepeatData=[]
 		for i in catdatas:
@@ -241,7 +230,6 @@ def getApiCategory():
 
 
 	except Error as e:#500 伺服器內部錯誤
-		# print(e)
 		errorReturn = {
 			"error": True,
 			"message": "伺服器內部錯誤"
@@ -249,4 +237,4 @@ def getApiCategory():
 		return jsonify(errorReturn), 500
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=3000, debug=True)
+    app.run( host="0.0.0.0",port=3000, debug=True)

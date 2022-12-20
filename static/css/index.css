@@ -3,6 +3,10 @@ body {
     padding: 0 auto;
     position: relative;   
 }
+.opacity{
+    background: #000000;
+    opacity: 0.25;
+}
 nav {
     position: sticky; 
     top: 0px;
@@ -20,10 +24,11 @@ nav {
     width:150px;
     height:34px;
     flex: auto;
-    margin: 10px;
-    font-size: 34px;
+    margin: 10px 0px 10px 10px;
+    font-size: 30px;
     line-height: 34px;
     color:#448899;
+    cursor: pointer; 
    
 }
 .top-right{
@@ -31,23 +36,25 @@ nav {
     display: flex;
     color: #757575;
 }
-.top-right-btn1{
-
+.top-right-tourbook{
     width:64px;
     height:14px;
-    margin: 10px;
+    margin: 10px 10px 10px 0px;
     font-size: 16px;
     line-height: 13px;
+    cursor: pointer; 
 }
-.top-right-btn2{
+.login-out{
     width:72px;
     height:14px;
-    margin: 10px;
+    margin: 10px 0px 10px 10px;
     font-size: 16px;
     line-height: 13px;
+    cursor: pointer; 
 }
 .web-container{
     position:relative;
+    justify-content: center;
 }
 .web-banner{
     width:100%;
@@ -60,6 +67,7 @@ nav {
 }
 .web-text-container{
     position:absolute;
+    justify-content: center;
     top:0;
     display:flex;
     width:100%;
@@ -100,8 +108,7 @@ nav {
     padding-left:10px;padding-right:10px;
     padding-top:0px;padding-bottom:0px;
     outline: none;
-    border: none;
-    
+    border: none;  
 }
 
 .button{
@@ -114,6 +121,7 @@ nav {
     border: none;
     justify-content:center;
     align-items: center;
+    cursor: pointer; 
 }
 .button-img{
     position:absolute; 
@@ -151,6 +159,7 @@ nav {
 .searchlistItems:hover{
     background: #E8E8E8;
     border-radius: 5px;    
+    cursor: pointer; 
 }
 .attraction{
     position: relative;
@@ -180,6 +189,7 @@ nav {
     border: solid;
     border-width: 2px;
     border-color: rgb(230, 228, 228);
+    cursor: pointer; 
 }
 .attraction-name{
     width: 100%;height: 40px;

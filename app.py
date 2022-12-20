@@ -5,6 +5,7 @@ app.config["TEMPLATES_AUTO_RELOAD"]=True
 app.config["JSON_SORT_KEYS"] = False
 
 from api import *
+# from user import *
 
 # Pages
 @app.route("/")
