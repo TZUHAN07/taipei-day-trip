@@ -5,7 +5,8 @@ from sqlalchemy import Table, Column, Integer, String, MetaData,Float,TEXT,Forei
 from mysql.connector import pooling
 from mysql.connector import Error
 import mysql.connector 
-
+import os
+from dotenv import load_dotenv
 
 engine = create_engine("mysql+pymysql://root:j610114*@localhost/tpdaywebsite")
 
@@ -28,11 +29,12 @@ with engine.connect() as connection:
   
 
     metadata.create_all(engine)
-
+load_dotenv()
+password = os.getenv("password")
 dbconfig = {
         "host": "localhost",
         "user":"root",
-        "password": "j610114*",
+        "password": password,
         "database":"tpdaywebsite",
 }
 connection_pool = mysql.connector.pooling.MySQLConnectionPool(
