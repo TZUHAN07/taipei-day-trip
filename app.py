@@ -53,7 +53,6 @@ def booking():
 def thankyou():
     return render_template("thankyou.html")
 
-
 # 註冊會員
 @app.route("/api/user", methods=["POST"])
 def login_post():
@@ -62,8 +61,6 @@ def login_post():
         name = datas["name"]
         email = datas["email"]
         password = datas["password"]
-        # hashed_password = bcrypt.generate_password_hash(password)
-        # (password, hashed_password)
 
         connection_object = connection_pool.get_connection()
         cursor = connection_object.cursor(buffered=True)
@@ -116,9 +113,9 @@ def login_get():
 @app.route("/api/user/auth", methods=["PUT"])
 def login_put():
     try:
-        data = request.get_json()
-        email = data["email"]
-        password = data["password"]
+        datas = request.get_json()
+        email = datas["email"]
+        password = datas["password"]
         
         connection_object = connection_pool.get_connection()
         cursor = connection_object.cursor(buffered=True)
