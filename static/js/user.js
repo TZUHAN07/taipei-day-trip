@@ -145,7 +145,7 @@ function registerSystem() {
     //  信箱:符合信箱的格式
     const register_email_verify = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]{2,5}$/.test(register_email.value)
     //  密碼:5-8位英數字(至少包含一個字母)
-    const register_password_verify = /^\d{8}$/.test(register_password.value)
+    const register_password_verify = /^(?=.*[A-Za-z])\w{8,12}$/.test(register_password.value)
     if (register_name.value === ""|| register_email.value === ""|| register_password.value === ""){
         register_msg.textContent= "尚有欄位未輸入"
     }else if(register_name_verify === false){
@@ -153,7 +153,7 @@ function registerSystem() {
     }else if(register_email_verify === false){
         register_msg.textContent= "信箱格式錯誤"
     }else if(register_password_verify === false){
-        register_msg.textContent= "密碼需為8字元的英文或數字,至少有一個英文字母"
+        register_msg.textContent= "密碼需為8-12字元的英文或數字,至少有一個英文字母"
     }else{
         fetch(`/api/user`, {
             method: "POST",
@@ -188,3 +188,12 @@ function registerSuccess(){
         login.classList.add("show_block")
     }, 2000);
 }
+//預定行程
+const tourbook=document.getElementById("tourbook")
+tourbook.addEventListener("click", function () { 
+    checkLogin()
+    if(logout){
+        location.href=`/api/booking`
+    }
+    
+})
