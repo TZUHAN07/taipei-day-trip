@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1" />
     <title>{% block title %}台北一日遊{% endblock %}</title>
     {% block head %}
     <link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/index.css')}}" />
@@ -12,6 +12,45 @@
 </head>
 
 <body>
+    <div class="black_background transition hide">
+        <div id="login" class="login transition hide">
+            <div class="verify ">
+                <div class="top-bar"></div>
+                <div class="verify_title">登入會員帳號</div>
+                <input type="text" name="email" id="login_email" class="login_email  verify_input"
+                    placeholder="輸入電子信箱" />
+                <br />
+                <input type="password" name="password" id="login_password" class="login_password verify_input"
+                    placeholder="輸入密碼" />
+                <br />
+                <div type="button" class="verify_btn verify_input" id="login_button">登入帳戶</div>
+                <div id="login_msg" class="see_msg"></div>
+                <div class="change_text">
+                <span class="verify_text ">還沒有帳戶？</span><span class="verify_text login_change changebtn">點此註冊</span>
+                </div>
+            </div>
+        </div>
+        <div id="register" class="register transition hide">
+            <div class="verify">
+                <div class="top-bar"></div>
+                <div class="verify_title">註冊會員帳號</div>
+                <input type="text" name="name" id="register_name" class="register_name  verify_input"
+                    placeholder="輸入姓名" />
+                <br />
+                <input type="text" name="email" id="register_email" class="register_email verify_input"
+                    placeholder="輸入電子信箱" />
+                <br />
+                <input type="password" name="password" id="register_password" class="register_password verify_input"
+                    placeholder="輸入密碼" />
+                <br />
+                <div type="button" class="verify_btn verify_input" id="register_button">註冊新帳戶</div>
+                <div id="register_msg"  class="see_msg"></div>
+                <div class="change_text">
+                <span class="verify_text ">已經有帳戶了？</span><span class="verify_text register_change changebtn">點此登入</span>
+                </div>
+            </div>
+        </div>
+    </div>
     <nav>
         <div class="top">
             <div class="top-left" id="taipeibtn"><b>台北一日遊</b></div>
@@ -42,48 +81,18 @@
                     <div class="searchlist hide" id="searchlist"></div>
                 </div>
             </div>
-    {% endblock %}
-            <div class="verify_container">
-                <div class="white_background"></div>
-                <div class="black_background transition hide"></div>
-                <div id="login" class="transition hide">
-                    <div class="verify  verify_login" >
-                        <div class="top-bar"></div>
-                        <div class="verify_title" >登入會員帳號</div>
-                        <input type="text" name="email" id="login_email" class="login_email  verify_input" placeholder="輸入電子信箱"/>
-                        <br />
-                        <input type="password" name="password" id="login_password" class="login_password verify_input" placeholder="輸入密碼" />
-                        <br />
-                        <button class="verify_btn verify_input" id="login_button">登入帳戶</button>
-                        <div class="login_msg"></div>
-                        <div class="verify_hint">還沒有帳戶？點此註冊</div>
-                    </div>
-                </div>
-                <div id="register" class="transition hide" >
-                    <div class="verify  verify_register" >
-                        <div class="top-bar"></div>
-                        <div class="verify_title">註冊會員帳號</div>
-                        <input type="text" name="name" id="register_name" class="register_name  verify_input" placeholder="輸入姓名"/>
-                        <br />
-                        <input type="text" name="email" id="register_email" class="register_email verify_input" placeholder="輸入電子信箱"/>
-                        <br />
-                        <input type="password" name="password" id="register_password" class="register_password verify_input" placeholder="輸入密碼" />
-                        <br />
-                        <button class="verify_btn verify_input" id="register_button">註冊新帳戶</button>
-                        <div class="register_msg"></div>
-                        <div class="verify_hint">已經有帳戶了？點此註冊</div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-    {% block src %}
+
+
+
     <div class="attraction" id="content"></div>
     {% endblock %}
     <div class="footer" id="footer">COPYRIGHT © 2022 台北一日遊</div>
-    
+
     {% block script %}
     <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/index.js')}}"></script>
+    <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/user.js')}}"></script>
     {% endblock %}
 </body>
 

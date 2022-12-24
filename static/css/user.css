@@ -1,36 +1,38 @@
+
 .black_background{
-    background: #000000;
-    opacity: 0.25;
+    position: absolute;
+    display: flex;
+    justify-content: center; 
+    background:#00000089;
+    width:100%;
+    height:100%;
+    z-index: 100;
+    
 }
-.hide{
-    display:none;
-}
-.show{
-    display:flex;
-}
+
 .transition{
     transition:  0.5 ease;
 }
-.verify_container{
-    position: absolute;
-    display:flex;
-    top:26px;
-    justify-content: center; 
-    color: #666666;
-    z-index: 99;
-}
+/* .verify_from{
+    width:100%;
+    height:auto;
+} */
 .verify{
     position: relative;
+    top: 80px;
     background: #FFFFFF;
     box-shadow: 0px 4px 60px #AAAAAA;
     border-radius: 6px;
+    color: #666666;
     text-align: center;
+    /* height: 100%; */
+    z-index:99;
 } 
-.verify_login{
+.login{
     width: 340px;
-    height: 275px;
+    height: auto;
 }
-.verify_register{
+.register{
     width: 340px;
     height: 332px;
 }
@@ -71,16 +73,36 @@
     justify-content:center;
     align-items: center;
     cursor: pointer; 
-    width: 310px;
-    height: 47px;
     font-weight: 400;
     font-size: 19px;
     line-height: 16px;
 }
-.verify_hint{
+.change_text{
+    padding: 10px;
+    margin: 0px 15px;
+}
+.verify_text{
     font-weight: 500;
     font-size: 16px;
     line-height: 13px;
     text-align: center;
-    margin:10px  15px 15px 15px;
+}
+.changebtn{
+    cursor: pointer;
+}
+.changebtn:hover{
+    color: #448899;
+}
+.hide{
+    display:none;
+}
+.show_block{
+    display: block;
+    margin: auto;
+}
+.see_msg {
+    padding: 0px 10px;
+    margin: 0px 15px;
+    font-size: 16px;
+    text-align: center;
 }
