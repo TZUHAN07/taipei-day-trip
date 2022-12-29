@@ -74,7 +74,8 @@ function bookingData(){
             text_title.textContent=`台北一日遊：${resultData["attraction"]["name"]}`
             booking_src.style.backgroundImage=`url(${resultData["attraction"]["image"]})`
             text_date_var.textContent=resultData["date"]
-            if (resultData["time"] ==="moring"){
+            console.log(text_date_var)
+            if (resultData["time"] =="morning"){
                 text_time_var.textContent="早上9點到下午4點"
             }else{
                 text_time_var.textContent="下午2點到下午9點"

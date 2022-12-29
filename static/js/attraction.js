@@ -67,18 +67,16 @@ function handler(e){
 
 // 開始預預約行程按鈕
 const checktour_button=document.getElementById("checktour_button")
-const date=document.getElementsByClassName("date")[0].value
 checktour_button.addEventListener("click", function () { 
-    // const date=document.getElementsByClassName("date")[0].value
+    const date=document.getElementsByClassName("date")[0].value
     const time=document.querySelector('input[name="time"]:checked').value
     let basic_price=0
-    if (time== "moring"){
+    if (time== "morning"){
         basic_price=2000
     }else{
         basic_price=2500
     }
 
-   
     fetch(`/api/booking`,{
         method: "POST",
         headers:{"Content-Type":"application/json"},
@@ -89,7 +87,7 @@ checktour_button.addEventListener("click", function () {
             price: basic_price
         })
     }).then(function (response) {
-        if (response.status==403 ||response.status==400 ){
+        if (response.status==403 ){
             login.classList.add("show_block")
             black_background.classList.add("show_block")
         }
