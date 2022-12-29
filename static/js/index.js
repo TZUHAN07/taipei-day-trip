@@ -132,6 +132,8 @@ function getKeywordData(searching) {
                 let not_data = document.createElement("div")
                 not_data.textContent = "找不到「 " + keyword + "」的相關資料"
                 content.appendChild(not_data)
+                footer.classList.add("nodata")
+                
             }
 
         })

@@ -3,6 +3,7 @@ html{
 }
 body {
     margin: 0 auto;
+    padding: 0 auto;
     position: relative;  
     color: #666666; 
 }
@@ -35,7 +36,7 @@ nav {
     display: flex;
     color: #757575;
 }
-.top-right-tourbook{
+.tourbook{
     width:64px;
     height:14px;
     margin: 10px 10px 10px 0px;
@@ -51,7 +52,26 @@ nav {
     line-height: 13px;
     cursor: pointer; 
 }
-.view-infro-container{
+.top-line{
+    width: 100%;
+    border: 1px solid #E8E8E8;
+}
+.footer{
+    width:100%;
+    height: 104px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    background-color: #757575;
+}
+.footer_text{
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+}
+/* attraction 樣式 */
+.view_infro_container{
     display:flex;
     justify-content: center;
 }
@@ -62,14 +82,13 @@ nav {
     margin:auto;
     justify-content: space-between;
 }
-
 .viewimg{
     width: 45%;
     margin: 0 auto;
 }
 
 /* slideshow */
-.slideshow-container {
+.slideshow_container {
     position: relative;
     margin: auto;
     display: flex;
@@ -162,7 +181,7 @@ nav {
     font-size: 16px;
     line-height: 13px;
 }
-.viewtext-name{
+.viewtext_name{
     display: flex;
     align-items: center;
     height: 33px;
@@ -170,7 +189,7 @@ nav {
     font-size: 24px;
     line-height: 24px;
 }
-.viewtext-cat-mrt{
+.viewtext_cat_mrt{
     display: flex;
     align-items: center;
     height: 22px;   
@@ -179,7 +198,7 @@ nav {
     line-height: 13px;
     margin:15px 0px 20px 0px;
 }
-.viewtext-order{
+.viewtext_order{
     width: 100%;
     position: absolute;
     height: 302px;
@@ -188,11 +207,11 @@ nav {
     vertical-align:bottom;
     box-sizing: border-box;
 }
-.view-tour{
+.view_tour{
     height: 22px;
     padding:15px 20px;
 }
-.view-subtitle{
+.view_subtitle{
     display: flex;
     align-items: center;
     height: 22px;
@@ -200,12 +219,12 @@ nav {
     font-size: 16px;
     line-height: 13px;
 }
-.veiw-date{
+.veiw_date{
     display: flex;
     align-items: center;
     padding:0px 20px ;
 }
-.veiw-date-choose{
+.veiw_date_choose{
     width: 81px;
     height: 17px;
 }
@@ -217,21 +236,21 @@ nav {
     border: none;
     cursor: pointer;
 }
-.veiw-time{
+.veiw_time{
     display: flex;
     padding:15px 20px 15px 20px;
     align-items: center;
     height: 22px;
   
 }
-.veiw-time-choose{
+.veiw_time_choose{
     width: 81px;
     height: 22px;
 }
 .group{
      height: 22px;
 }
-.radio-group{
+.radio_group{
     position: relative;
     display: inline-block;
     align-items: center;
@@ -240,11 +259,10 @@ nav {
     margin: auto 8px auto 6px;
 }
 
-.radio-input {
+.radio_input {
     display: none; 
-    /* visibility: hidden; */
 }
-.radio-label{
+.radio_label{
     display: flex; 
     position: relative;
     width:48px;
@@ -257,7 +275,7 @@ nav {
     
 }
 
-.radio-button{
+.radio_button{
     position: absolute;
     display: flex;
     height: 22px;
@@ -269,7 +287,7 @@ nav {
     box-sizing: border-box; 
     left: 0px;
 }
-.radio-button::after{
+.radio_button::after{
     position: absolute;
     display: block;
     content: "";
@@ -283,17 +301,17 @@ nav {
     transform: translate(-50%, -50%);
     transition: opacity 0.2s;
 }
-.radio-input:checked ~ .radio-label .radio-button::after {
+.radio_input:checked ~ .radio-label .radio_button::after {
     /* 選中radio時 才顯示中間點點 */
     opacity: 1;
   }
 
-.veiw-price{
+.veiw_price{
     display: flex;
     padding:0px 0px 25px 20px;
     align-items: center;
 }
-.tour-price{
+.tour_price{
     width: 81px;
     height: 22px;
 }
@@ -306,7 +324,7 @@ nav {
     display: flex;
     align-items: center;
 }
-.view-button{
+.view_button{
     padding-left:  20px;
 }
 .button{
@@ -320,7 +338,7 @@ nav {
     text-align: center; 
     cursor: pointer;
 }
-.btn-text{
+.btn_text{
     width: 114px;
     height: 16px;
     font-size: 19px;
@@ -343,7 +361,7 @@ nav {
     padding: 10px;
     box-sizing: border-box;
 }
-.bottom-contaioner{
+.bottom_contaioner{
     padding:10px; 
     margin:auto;
 }
@@ -353,15 +371,7 @@ nav {
     line-height: 23px;
 }
 
-.footer{
-    width:100%;
-    height: 104px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #FFFFFF;
-    background-color: #757575;
-}
+
 
 @media(max-width:1200px) {
     .top,.viewinfro{
@@ -380,7 +390,7 @@ nav {
         flex-wrap: wrap;
         justify-content: center;
     }
-    .slideshow-container{
+    .slideshow_container{
         width:540px;
     }
     .viewimg{
@@ -390,7 +400,7 @@ nav {
         width: 540px;
         margin:auto; 
     }
-    .view-subtitle{
+    .view_subtitle{
         line-height: 20px;
     }
     .line{
@@ -401,7 +411,7 @@ nav {
     }
 }
 @media(max-width:600px) {
-    .slideshow-container{
+    .slideshow_container{
         width:340px;
     }
     .mySlides{
@@ -416,19 +426,19 @@ nav {
         width: 340px;
         margin: auto;
     }
-    .view-subtitle{
+    .view_subtitle{
         width: 300px;  
         height: 48px;
         line-height: 23px;
     }
-    .viewtext-name,
-    .viewtext-cat-mrt,
+    .viewtext_name,
+    .viewtext_cat_mrt,
     .line,
     .bottom{
         width: 340px;
         
     }
-    .viewtext-order{
+    .viewtext_order{
         width: 340px;
         height: 300px; 
     }
