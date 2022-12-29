@@ -78,34 +78,32 @@ checktour_button.addEventListener("click", function () {
         basic_price=2500
     }
 
-    if (time==null ||date==null){
-        alert ("尚有欄位未填寫")
-    }else{
-        fetch(`/api/booking`,{
-            method: "POST",
-            headers:{"Content-Type":"application/json"},
-            body: JSON.stringify({
-                attractionId: attrId,
-                date: date,
-                time: time,
-                price: basic_price
-            })
-        }).then(function (response) {
-            if (response.status==403 ||response.status==400 ){
-                login.classList.add("show_block")
-                black_background.classList.add("show_block")
-            }
-            console.log(response)
-            return response.json()
-        }).then(function (data) {
-            console.log(data)
-            if (data["ok"]){
-                location.href=`/booking`
-            }
-        }).catch(function (err) {
-            console.log("錯誤訊息", err)
+   
+    fetch(`/api/booking`,{
+        method: "POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            attractionId: attrId,
+            date: date,
+            time: time,
+            price: basic_price
         })
-    }
+    }).then(function (response) {
+        if (response.status==403 ||response.status==400 ){
+            login.classList.add("show_block")
+            black_background.classList.add("show_block")
+        }
+        console.log(response)
+        return response.json()
+    }).then(function (data) {
+        console.log(data)
+        if (data["ok"]){
+            location.href=`/booking`
+        }
+    }).catch(function (err) {
+        console.log("錯誤訊息", err)
+    })
+    
 })
 
 //連播圖片

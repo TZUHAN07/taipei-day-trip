@@ -301,7 +301,7 @@ nav {
     transform: translate(-50%, -50%);
     transition: opacity 0.2s;
 }
-.radio_input:checked ~ .radio-label .radio_button::after {
+.radio_input:checked ~ .radio_label .radio_button::after {
     /* 選中radio時 才顯示中間點點 */
     opacity: 1;
   }
