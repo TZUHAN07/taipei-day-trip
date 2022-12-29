@@ -35,14 +35,16 @@ function checkLogin() {
     .then(function (response) {
         return response.json()
     }).then(function (data) {
-        if (data["data"]=null){
-            location.href='/'
+        if (data["data"]==null){
+            location.href=`/`
+        }else{
+            bookingName()
         }
     }).catch(function (err) {
         console.log("錯誤訊息", err)
     })
 }
-
+checkLogin()
 //顯示預定人名
 function bookingName(){
     fetch(`/api/user/auth`)
@@ -89,10 +91,6 @@ function bookingData(){
     }).catch(function (err) {
         console.log("錯誤訊息", err) 
     })
-}
-async function page_action() {
-    await checkLogin()
-    bookingData()
 }
 
 //  刪除預定行程

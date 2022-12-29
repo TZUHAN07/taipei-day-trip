@@ -53,16 +53,12 @@ const getViewData = function (resultData) {
     veiw_traffic_text.textContent = transport
 
 }
+
 // 監聽morining,afternoon
 function handler(e){
     const time=document.querySelector('input[name="time"]:checked').value
-    if (time==null){
-        login.classList.add("show_block")
-        black_background.classList.add("show_block")
-    }
-    else if (time== "morning"){
+    if (time== "morning"){
         price.textContent = "新台幣 2000 元"
-
     }else{
         price.textContent = "新台幣 2500 元"
     }
@@ -71,43 +67,45 @@ function handler(e){
 
 // 開始預預約行程按鈕
 const checktour_button=document.getElementById("checktour_button")
-
+const date=document.getElementsByClassName("date")[0].value
 checktour_button.addEventListener("click", function () { 
-    const date=document.getElementsByClassName("date")[0].value
+    // const date=document.getElementsByClassName("date")[0].value
     const time=document.querySelector('input[name="time"]:checked').value
     let basic_price=0
-    if (time==null){
-        login.classList.add("show_block")
-        black_background.classList.add("show_block")
-    }else if (time== "moring"){
+    if (time== "moring"){
         basic_price=2000
     }else{
         basic_price=2500
     }
-    fetch(`/api/booking`,{
-        method: "POST",
-        headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({
-            attractionId: attrId,
-            date: date,
-            time: time,
-            price: basic_price
+
+    if (time==null ||date==null){
+        alert ("尚有欄位未填寫")
+    }else{
+        fetch(`/api/booking`,{
+            method: "POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({
+                attractionId: attrId,
+                date: date,
+                time: time,
+                price: basic_price
+            })
+        }).then(function (response) {
+            if (response.status==403 ||response.status==400 ){
+                login.classList.add("show_block")
+                black_background.classList.add("show_block")
+            }
+            console.log(response)
+            return response.json()
+        }).then(function (data) {
+            console.log(data)
+            if (data["ok"]){
+                location.href=`/booking`
+            }
+        }).catch(function (err) {
+            console.log("錯誤訊息", err)
         })
-    }).then(function (response) {
-        if (response.status==403 ||response.status==400 ){
-            login.classList.add("show_block")
-            black_background.classList.add("show_block")
-        }
-        console.log(response)
-        return response.json()
-    }).then(function (data) {
-        console.log(data)
-        if (data["ok"]){
-            location.href=`/booking`
-        }
-    }).catch(function (err) {
-        console.log("錯誤訊息", err)
-    })
+    }
 })
 
 //連播圖片
