@@ -30,7 +30,6 @@ const getallData = function () {
             console.log(resultData)
             images = resultData.images
             getViewData(resultData)
-            // timeChoose()
 
         }).catch(function (err) {
             console.log("錯誤訊息", err)

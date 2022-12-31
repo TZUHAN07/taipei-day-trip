@@ -3,8 +3,8 @@ from mysql.connector import Error
 from mysql.connector import pooling
 from flask_bcrypt import Bcrypt
 from dotenv import load_dotenv
-import os
-import jwt
+import os,jwt,requests
+from datetime import datetime, timezone, timedelta
 from flask import *
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
@@ -20,11 +20,11 @@ app = Flask(__name__, static_folder="static", static_url_path="/")
 bcrypt = Bcrypt(app)
 
 load_dotenv()
-password = os.getenv("password")
+
 dbconfig = {
     "host": "localhost",
-    "user": "root",
-    "password": password,
+    "user": os.getenv("user"),
+    "password": os.getenv("password"),
     "database": "tpdaywebsite",
 }
 
@@ -54,117 +54,277 @@ def thankyou():
     return render_template("thankyou.html")
 
 #建立新的訂單
-@app.route("/api/order", methods=["POST"])
+@app.route("/api/orders", methods=["POST"])
 def order_post():
-    return 
+    try:
+        cookies = request.cookies.get("access_token")
+        member_data = jwt.decode(
+            cookies, "secertonly", algorithms=["HS256"]
+        )
+    
+        # connection_object = connection_pool.get_connection()
+        # cursor = connection_object.cursor(buffered=True)
+        # sql = ("SELECT  * FROM booking where memberId = (SELECT id FROM member WHERE name=%s)")
+        # val=(membername,)
+        # cursor.execute(sql,val)
+        
+
+
+        if cookies is None:
+            dataReturn = {
+                "error": True,
+                "message": "未登入系統，拒絕存取"
+            }
+            return jsonify(dataReturn),403
+        data = request.get_json()
+        prime = data["prime"]
+        price = data["order"]["price"]
+        trip_id = data["order"]["trip"]["attraction"]["id"]
+        trip_name = data["order"]["trip"]["attraction"]["name"]
+        trip_address = data["order"]["trip"]["attraction"]["address"]
+        trip_image = data["order"]["trip"]["attraction"]["image"]
+        trip_date = data["order"]["trip"]["date"]
+        trip_time = data["order"]["trip"]["time"]
+        name = data["order"]["contact"]["name"]
+        email = data["order"]["contact"]["email"]
+        phone = data["order"]["contact"]["phone"]
+        memberId=member_data["id"]
+        status=1
+
+        tz = timezone(timedelta(hours=+8))
+        dt = datetime.now(tz)
+        dt_string = dt.strftime("%Y%m%d%H%M%S")
+        order_number = dt_string
+
+        if name==""or email=="" or phone =="":
+            return jsonify({"error": True, "message": "尚有資料未輸入"}), 400
+        else:
+            connection_object = connection_pool.get_connection()
+            cursor = connection_object.cursor(buffered=True)
+            insert_data = (
+                "INSERT INTO  orderlist (number, price, attractionId, date,time,memberId, phone, codestatus)VALUES (%s,%s,%s,%s,%s,%s,%s,%s) "
+            )
+
+            val = (order_number,price,trip_id,trip_date,trip_time,memberId,phone,status)
+            cursor.execute(insert_data , val)
+            connection_object.commit()
+
+            headers = {
+	    		"Content-Type": "application/json",
+	    		"x-api-key": "partner_vDU0LpYWT8sMGjL6DxiwEwM5pL9d8o467u4dghPzQpeeR9cuNnlDn0EY"
+	    		}
+            orderdata ={
+                "prime": prime,
+	    		"partner_key": "partner_vDU0LpYWT8sMGjL6DxiwEwM5pL9d8o467u4dghPzQpeeR9cuNnlDn0EY",
+	    		"merchant_id": "tzuhan_CTBC",
+	    		"details": trip_name +","+trip_date+","+trip_time+","+"的訂單",
+	    		"amount": price,
+	    		"cardholder": {
+	    			"phone_number": phone,
+	    			"name": name,
+	    			"email": email,
+	    		},
+                "remember":True
+            }
+            # Pay by Prime to TapPay Server & get TapPay result
+            response = requests.post("https://sandbox.tappaysdk.com/tpc/payment/pay-by-prime", json = orderdata, headers = headers)
+            response = response.json()
+
+            if response["status"] == 0:
+                dataReturn={
+                "data":{
+	    				"number": order_number,
+	    				"payment": {
+	    				"status": "0",
+	    				"message": "付款成功"
+	    				}
+	    			}
+                }
+                return jsonify(dataReturn),200
+            else:
+                dataReturn = {
+                "error": True,
+                "message": "付款失敗,待付款"
+                }
+            return jsonify(dataReturn),400
+    except:  # 500 伺服器內部錯誤
+        return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
 
 #取得訂單資訊
-# @app.route("/api/order/{orderName}")
-# def thankyou():
-#     return 
+@app.route("/api/order/<number>")
+def order_get(number):
+    # try:
+        cookies = request.cookies.get("access_token")
+        if number:
+            if cookies is None:
+                dataReturn = {
+                    "error": True,
+                    "message": "未登入系統，拒絕存取"
+                }
+                return jsonify(dataReturn),403
+            else:
+                connection_object = connection_pool.get_connection()
+                cursor = connection_object.cursor(buffered=True)
+                sql = (
+                    "SELECT  number, price, attractionId, attractions.name, attractions.address, attractions.images, date, time, member.name, member.email, phone,codestatus  FROM orderlist INNER JOIN attractions ON orderlist.attractionId = attractions.id INNER JOIN member ON orderlist.memberId = member.id"
+                )
+                cursor.execute(sql)
+                result = cursor.fetchone()  
+                if result is None:
+                    order_data = {"data": None}
+                    return jsonify(order_data),400
+                else:
+                    order_data = {
+                        "data": {
+                            "number": result[0],
+                            "price": result[1],
+                            "trip": {
+                              "attraction": {
+                                "id": result[2],
+                                "name": result[3],
+                                "address": result[4],
+                                "image": result[5].split(",")[0]
+                              },
+                              "date": result[6],
+                              "time": result[7]
+                            },
+                            "contact": {
+                              "name": result[8],
+                              "email": result[9],
+                              "phone": result[10]
+                            },
+                            "status":result[11]
+                        }
+                    }
+                    print(201,order_data)
+                    return jsonify(order_data),200
+    # except:  # 500 伺服器內部錯誤
+    #     return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    # finally:
+    #     connection_object.close()
+    
 
 # 取得未確認訂單行程
 @app.route("/api/booking", methods=["GET"])
 def booking_get():
-    cookies = request.cookies.get("access_token")
-    if cookies is None:
-        dataReturn = {
-            "error": True,
-            "message": "未登入系統，拒絕存取"
-        }
-        return jsonify(dataReturn),403
-    else:
-        connection_object = connection_pool.get_connection()
-        cursor = connection_object.cursor(buffered=True)
-        sql = (
-            "SELECT attractionId,name,address,images,date,time,price from booking  INNER JOIN  attractions ON booking.attractionId=attractions.id")
-        cursor.execute(sql)
-        result = cursor.fetchone()  
-        if result is None:
-            booking_data = {"data": None}
-            return jsonify(booking_data) 
-        else:
-            booking_data = {
-            "data":{
-					"attraction": {
-						"id": result[0],
-						"name": result[1],
-						"address": result[2],
-						"image": result[3].split(",")[0]
-					},
-					"date": result[4],
-					"time": result[5],
-					"price": result[6]
-				}
+    try:
+        cookies = request.cookies.get("access_token")
+        if cookies is None:
+            dataReturn = {
+                "error": True,
+                "message": "未登入系統，拒絕存取"
             }
-            connection_object.close()
-            return jsonify(booking_data),200
-
+            return jsonify(dataReturn),403
+        else:
+            connection_object = connection_pool.get_connection()
+            cursor = connection_object.cursor(buffered=True)
+            sql = (
+                "SELECT attractionId,name,address,images,date,time,price from booking  INNER JOIN  attractions ON booking.attractionId=attractions.id")
+            cursor.execute(sql)
+            result = cursor.fetchone()  
+            if result is None:
+                booking_data = {"data": None}
+                return jsonify(booking_data) 
+            else:
+                booking_data = {
+                "data":{
+	    				"attraction": {
+	    					"id": result[0],
+	    					"name": result[1],
+	    					"address": result[2],
+	    					"image": result[3].split(",")[0]
+	    				},
+	    				"date": result[4],
+	    				"time": result[5],
+	    				"price": result[6]
+	    			}
+                }
+                print(booking_data)
+                return jsonify(booking_data),200
+    except:  # 500 伺服器內部錯誤
+        return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
 
 
 # 建立新的預定行程
 @app.route("/api/booking", methods=["POST"])
 def booking_post():
-    cookies = request.cookies.get("access_token")
-    if cookies is None:
-        dataReturn = {
-            "error": True,
-            "message": "未登入系統，拒絕存取"
-        }
-        return jsonify(dataReturn),403
-    else:
-        data = request.get_json()
-        attractionId = data["attractionId"]
-        date = data["date"]
-        time = data["time"]
-        price= data["price"]
+    try:
+        cookies = request.cookies.get("access_token")
+        member_data = jwt.decode(
+            cookies, "secertonly", algorithms=["HS256"]
+        )
+        print(259,member_data)
 
-        if date == "" or time == "":
+        if cookies is None:
             dataReturn = {
-            "error": True,
-            "message": "日期或時間尚未選擇"
+                "error": True,
+                "message": "未登入系統，拒絕存取"
             }
-            return jsonify(dataReturn),400
+            return jsonify(dataReturn),403
         else:
-            connection_object = connection_pool.get_connection()
-            cursor = connection_object.cursor(buffered=True)
-            sql = "select * from booking"
-            cursor.execute(sql)
-            result = cursor.fetchone()
-            print("94",result)
-            if result:
-                update_data = ("UPDATE booking SET attractionId = %s, date = %s, time = %s, price = %s ")
-                val = (attractionId , date, time, price)
-                cursor.execute(update_data , val) 
-                connection_object.commit()
-                connection_object.close()
-                return jsonify({"ok": True}), 200
+            data = request.get_json()
+            attractionId = data["attractionId"]
+            date = data["date"]
+            time = data["time"]
+            price= data["price"]
+            memberId=member_data["id"]
+
+            if date == "" or time == "":
+                dataReturn = {
+                "error": True,
+                "message": "日期或時間尚未選擇"
+                }
+                return jsonify(dataReturn),400
             else:
-                insert_data = ("INSERT INTO booking (attractionId, date, time, price) VALUES (%s,%s,%s,%s)")
-                val = (attractionId , date, time, price)
-                cursor.execute(insert_data , val)
-                connection_object.commit()
-                return jsonify({"ok": True}), 200
-            
+                connection_object = connection_pool.get_connection()
+                cursor = connection_object.cursor(buffered=True)
+                sql = "select * from booking"
+                cursor.execute(sql)
+                result = cursor.fetchone()
+                if result:
+                    update_data = ("UPDATE booking SET attractionId = %s, date = %s, time = %s, price = %s ,memberId=%s")
+                    val = (attractionId , date, time, price,memberId)
+                    cursor.execute(update_data , val) 
+                    connection_object.commit()
+                    return jsonify({"ok": True}), 200
+                else:
+                    insert_data = ("INSERT INTO booking (attractionId, date, time, price,memberId) VALUES (%s,%s,%s,%s,%s)")
+                    val = (attractionId , date, time, price,memberId)
+                    cursor.execute(insert_data , val)
+                    connection_object.commit()
+                    return jsonify({"ok": True}), 200
+    except:  # 500 伺服器內部錯誤
+        return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
+
+        
 
 # 刪除目前預定行程
 @app.route("/api/booking", methods=["DELETE"])
 def booking_delete():
-    cookies = request.cookies.get("access_token")
-    if cookies is None:
-        dataReturn = {
-            "error": True,
-            "message": "未登入系統，拒絕存取"
-        }
-        connection_object.close()
-        return jsonify(dataReturn),403
-    else:
-        connection_object = connection_pool.get_connection()
-        cursor = connection_object.cursor(buffered=True)
-        sql=("DELETE FROM booking")
-        cursor.execute(sql)
-        connection_object.commit()
-        return jsonify({"ok": True}), 200
+    try:
+        cookies = request.cookies.get("access_token")
+        if cookies is None:
+            dataReturn = {
+                "error": True,
+                "message": "未登入系統，拒絕存取"
+            }
+            return jsonify(dataReturn),403
+        else:
+            connection_object = connection_pool.get_connection()
+            cursor = connection_object.cursor(buffered=True)
+            sql=("DELETE FROM booking ")
+            cursor.execute(sql)
+            connection_object.commit()
+            return jsonify({"ok": True}), 200
+    except:  # 500 伺服器內部錯誤
+        return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    
 
 
 # 註冊會員
@@ -190,7 +350,6 @@ def login_post():
             val = (name, email, hashed_password)
             cursor.execute(insert_data, val)
             connection_object.commit()
-            connection_object.close()
             return jsonify({"ok": True}), 200
         elif account[2] == email:
             dataReturn = {
@@ -206,6 +365,10 @@ def login_post():
             return jsonify(dataReturn), 400
     except:  # 500 伺服器內部錯誤
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
+
+
 
 
 @app.route("/api/user/auth", methods=["GET"])
@@ -237,8 +400,8 @@ def login_put():
         cursor.execute(sql, val)
 
         account = cursor.fetchone()
+        print(402,account)
         encrypted_password = account[3]
-        connection_object.close()
 
         if account is None:
             dataReturn = {
@@ -253,6 +416,7 @@ def login_put():
                     "name": account[1],
                     "email": email,
                 }
+                
                 access_token = jwt.encode(payload, "secertonly")
                 response = make_response({"ok": True})
                 # 設置 cookie，並指定 cookie 的名稱、值、有效期限等信息
@@ -266,6 +430,8 @@ def login_put():
                 },400
     except:
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
 
 
 @app.route("/api/user/auth", methods=["DELETE"])
@@ -333,7 +499,6 @@ def InquireAttraction():
                 'nextPage': nextpage,
                 'data': alldatas
             }
-            connection_object.close()
             return jsonify(dataReturn), 200
 
         else:
@@ -380,10 +545,12 @@ def InquireAttraction():
                 'nextPage': nextpage,
                 'data': alldatas
             }
-            connection_object.close()
             return jsonify(dataReturn), 200
     except :  # 500 伺服器內部錯誤
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
+
 
 
 @app.route("/api/attraction/<attractionId>", methods=["GET"])
@@ -403,7 +570,6 @@ def getApiId(attractionId):
                 cursor.execute(
                     "select * from attractions where id = %s ", (attractionId,))
                 resultData = cursor.fetchone()
-                connection_object.close()
 
                 data = {
                     "id": resultData[0],
@@ -428,17 +594,18 @@ def getApiId(attractionId):
                     "error": True,
                     "message": "超過有效範圍"
                 }
-                connection_object.close()
                 return jsonify(errorReturn), 400
         else:
             errorReturn = {
                 "error": True,
                 "message": "請輸入有效數值"
             }
-            connection_object.close()
             return jsonify(errorReturn), 400
     except:  # 500 伺服器內部錯誤
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
+
 
 
 @app.route("/api/categories", methods=["GET"])
@@ -462,10 +629,12 @@ def getApiCategory():
         dataReturn = {
             "data": noRepeatData
         }
-        connection_object.close()
         return jsonify(dataReturn), 200
     except Error as e:  # 500 伺服器內部錯誤
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
+
 
 
 if __name__ == '__main__':
