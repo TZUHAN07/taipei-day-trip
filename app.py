@@ -61,15 +61,7 @@ def order_post():
         member_data = jwt.decode(
             cookies, "secertonly", algorithms=["HS256"]
         )
-    
-        # connection_object = connection_pool.get_connection()
-        # cursor = connection_object.cursor(buffered=True)
-        # sql = ("SELECT  * FROM booking where memberId = (SELECT id FROM member WHERE name=%s)")
-        # val=(membername,)
-        # cursor.execute(sql,val)
-        
-
-
+        # print(member_data)
         if cookies is None:
             dataReturn = {
                 "error": True,
@@ -155,7 +147,7 @@ def order_post():
 #取得訂單資訊
 @app.route("/api/order/<number>")
 def order_get(number):
-    # try:
+    try:
         cookies = request.cookies.get("access_token")
         if number:
             if cookies is None:
@@ -198,12 +190,12 @@ def order_get(number):
                             "status":result[11]
                         }
                     }
-                    print(201,order_data)
+                    # print(order_data)
                     return jsonify(order_data),200
-    # except:  # 500 伺服器內部錯誤
-    #     return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
-    # finally:
-    #     connection_object.close()
+    except:  # 500 伺服器內部錯誤
+        return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
+    finally:
+        connection_object.close()
     
 
 # 取得未確認訂單行程
@@ -241,7 +233,7 @@ def booking_get():
 	    				"price": result[6]
 	    			}
                 }
-                print(booking_data)
+                # print(booking_data)
                 return jsonify(booking_data),200
     except:  # 500 伺服器內部錯誤
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
@@ -252,12 +244,11 @@ def booking_get():
 # 建立新的預定行程
 @app.route("/api/booking", methods=["POST"])
 def booking_post():
+    connection_object = connection_pool.get_connection()
+    cursor = connection_object.cursor(buffered=True)
     try:
         cookies = request.cookies.get("access_token")
-        member_data = jwt.decode(
-            cookies, "secertonly", algorithms=["HS256"]
-        )
-        print(259,member_data)
+        
 
         if cookies is None:
             dataReturn = {
@@ -271,7 +262,6 @@ def booking_post():
             date = data["date"]
             time = data["time"]
             price= data["price"]
-            memberId=member_data["id"]
 
             if date == "" or time == "":
                 dataReturn = {
@@ -280,20 +270,18 @@ def booking_post():
                 }
                 return jsonify(dataReturn),400
             else:
-                connection_object = connection_pool.get_connection()
-                cursor = connection_object.cursor(buffered=True)
                 sql = "select * from booking"
                 cursor.execute(sql)
                 result = cursor.fetchone()
                 if result:
-                    update_data = ("UPDATE booking SET attractionId = %s, date = %s, time = %s, price = %s ,memberId=%s")
-                    val = (attractionId , date, time, price,memberId)
+                    update_data = ("UPDATE booking SET attractionId = %s, date = %s, time = %s, price = %s ")
+                    val = (attractionId , date, time, price)
                     cursor.execute(update_data , val) 
                     connection_object.commit()
                     return jsonify({"ok": True}), 200
                 else:
-                    insert_data = ("INSERT INTO booking (attractionId, date, time, price,memberId) VALUES (%s,%s,%s,%s,%s)")
-                    val = (attractionId , date, time, price,memberId)
+                    insert_data = ("INSERT INTO booking (attractionId, date, time, price) VALUES (%s,%s,%s,%s)")
+                    val = (attractionId , date, time, price)
                     cursor.execute(insert_data , val)
                     connection_object.commit()
                     return jsonify({"ok": True}), 200
@@ -381,7 +369,7 @@ def login_get():
         else:
             member_data = jwt.decode(
                 cookies, "secertonly", algorithms=["HS256"])
-            return jsonify({"data": member_data})
+            return jsonify({"data": member_data}),200
     except:
         return jsonify({"error": True, "message": "伺服器內部錯誤"}), 500
 
@@ -400,7 +388,7 @@ def login_put():
         cursor.execute(sql, val)
 
         account = cursor.fetchone()
-        print(402,account)
+        # print(account)
         encrypted_password = account[3]
 
         if account is None:
@@ -473,7 +461,6 @@ def InquireAttraction():
             val = (keyword, "%"+keyword+"%", page*12)
             cursor.execute(sql, val)
             results = cursor.fetchall()
-            # connection_object.close()
             for result in results:
                 datas = {
                     "id": result[0],
@@ -586,7 +573,6 @@ def getApiId(attractionId):
                 dataReturn = {
                     "data": data
                 }
-                # connection_object.close()
                 return jsonify(dataReturn), 200
 
             else:  # 400 id超過有效範圍
