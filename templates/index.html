@@ -55,11 +55,12 @@
         <div class="top">
             <div class="top-left" id="taipeibtn"><b>台北一日遊</b></div>
             <div class="top-right">
-                <div class="top-right-tourbook" id="top-right-tourbook">預定行程</div>
+                <div class="tourbook" id="tourbook">預定行程</div>
                 <div class="login-out" id="login-signin">登入/註冊</div>
                 <div class="login-out hide" id="logout">登出系統</div>
             </div>
         </div>
+        <div class="top-line"></div>
     </nav>
     {% block main %}
     <div class="web-container">
@@ -83,12 +84,11 @@
             </div>
         </div>
     </div>
-
-
-
     <div class="attraction" id="content"></div>
     {% endblock %}
-    <div class="footer" id="footer">COPYRIGHT © 2022 台北一日遊</div>
+    <div class="footer" id="footer">
+        <div class="footer_text">COPYRIGHT © 2022 台北一日遊</div>
+    </div>
 
     {% block script %}
     <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/index.js')}}"></script>

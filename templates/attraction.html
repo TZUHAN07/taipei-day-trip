@@ -1,14 +1,14 @@
 {% extends "index.html" %}
-{% block title %}台北一日遊景點資訊{% endblock %}
+{% block title %}景點資訊-台北一日遊{% endblock %}
 {% block head %}
 <link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/attraction.css')}}" />
 <link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/user.css')}}" />
-
 {% endblock %}
+
 {% block main %}
 <div class="viewinfro">
     <div class="viewimg">
-        <div id="slideshow-container" class="slideshow-container">
+        <div id="slideshow_container" class="slideshow_container">
             <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
             <a class="next" onclick="plusSlides(1)">&#10095;</a>
         </div>
@@ -17,40 +17,40 @@
     </div>
 
     <div class="viewtext" >
-        <div class="viewtext-name"></div>
-        <div class="viewtext-cat-mrt"></div>
-        <div class="viewtext-order">
-                <div class="view-tour boldfontstyle">訂購導覽行程</div>
-                <div class="view-subtitle">以此景點為中心的一日行程，帶您探索城市角落故事</div>
-                <div class="veiw-date">
-                    <div class="veiw-date-choose boldfontstyle">選擇日期：</div>
+        <div class="viewtext_name"></div>
+        <div class="viewtext_cat_mrt"></div>
+        <div class="viewtext_order">
+                <div class="view_tour boldfontstyle">訂購導覽行程</div>
+                <div class="view_subtitle">以此景點為中心的一日行程，帶您探索城市角落故事</div>
+                <div class="veiw_date">
+                    <div class="veiw_date_choose boldfontstyle">選擇日期：</div>
                     <input type="date" class="date" />
                 </div class="group">
-                <div class="veiw-time">
-                    <div class="veiw-time-choose boldfontstyle">選擇時間：</div>
+                <div class="veiw_time">
+                    <div class="veiw_time_choose boldfontstyle">選擇時間：</div>
                     <div class="group">
-                        <div class="radio-group">
-                            <input type="radio" class="radio-input" id="morning" name="time" value="morning" />
-                            <label for="morning" class="radio-label">
-                                <span class="radio-button"></span>上半天
+                        <div class="radio_group">
+                            <input type="radio" class="radio_input" id="morning" name="time" value="morning"  onchange="handler(event);"/>
+                            <label for="morning" class="radio_label">
+                                <span class="radio_button"></span>上半天
                             </label>
                         </div>
 
-                        <div class="radio-group">
-                            <input type="radio" class="radio-input" id="afternoon" name="time" value="afternoon" />
-                            <label for="afternoon" class="radio-label">
-                                <span class="radio-button"></span>下半天
+                        <div class="radio_group">
+                            <input type="radio" class="radio_input" id="afternoon" name="time" value="afternoon"  onchange="handler(event);"/>
+                            <label for="afternoon" class="radio_label">
+                                <span class="radio_button"></span>下半天
                             </label>
                         </div>
                     </div>
                 </div>
-                <div class="veiw-price">
-                    <div class=" tour-price boldfontstyle">導覽費用：</div>
+                <div class="veiw_price">
+                    <div class=" tour_price boldfontstyle">導覽費用：</div>
                     <div class="price" id="price"></div>
                 </div>
-                <div class="view-button">
-                    <div class="button" id="button" type="button">
-                        <div class="btn-text">開始預約行程</div>
+                <div class="view_button">
+                    <div class="button" id="checktour_button" type="button">
+                        <div class="btn_text">開始預約行程</div>
                     </div>
                 </div>
             </div>
@@ -59,23 +59,22 @@
 <div class="line"></div>
 <div class="outcontainer">
     <div class="bottom">
-        <div class="bottom-contaioner">
-            <div class="veiw-describe bottomstr"></div>
+        <div class="bottom_contaioner">
+            <div class="veiw_describe bottomstr"></div>
         </div>
-        <div class="bottom-contaioner">
-            <div class="veiw-address boldfontstyle">景點地址：</div>
-            <div class="veiw-address-text bottomstr"></div>
+        <div class="bottom_contaioner">
+            <div class="veiw_address boldfontstyle">景點地址：</div>
+            <div class="veiw_address_text bottomstr"></div>
         </div>
-        <div class="bottom-contaioner">
-            <div class="veiw-traffic boldfontstyle">交通方式：</div>
-            <div class="veiw-traffic-text bottomstr"></div>
+        <div class="bottom_contaioner">
+            <div class="veiw_traffic boldfontstyle">交通方式：</div>
+            <div class="veiw_traffic_text bottomstr"></div>
         </div>
     </div>
 </div>
 {% endblock %}
+
 {% block script %}
 <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/attraction.js')}}"></script>
 <script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/user.js')}}"></script>
 {% endblock %}
-
-</body>

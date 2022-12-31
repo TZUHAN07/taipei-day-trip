@@ -1,0 +1,91 @@
+{% extends "index.html" %}
+{% block title %}預定行程-台北一日遊{% endblock %}
+{% block head %}
+<link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/booking.css')}}" />
+<link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/user.css')}}" />
+{% endblock %}
+
+{% block main %}
+<div class="limit_width">
+    <div class="booking_name" id="booking_membername"></div>
+    <div class=" no_booking hide" id="no_booking">目前沒有任何預定行程。</div>
+    <div class="allbooking_data">
+        <div class="booking_container">
+                <div class="booking_data" >
+                    <div class="booking_src" id="booking_src"></div>
+                    <div class="booking_text">
+                        <li class="bold_text_container booking_text_title" id="text_title"></li>
+                        <li class="bold_text_container">
+                            <span class="container_text">日期：</span>
+                            <span class="text_var" id="text_date_var"></span>
+                        </li>
+                        <li class="bold_text_container">
+                            <span class="container_text">時間：</span>
+                            <span class="text_var" id="text_time_var" ></span>
+                        </li>
+                        <li class="bold_text_container">
+                            <span class="container_text">費用：</span>
+                            <span class="text_var" id="text_price_var" ></span>
+                        </li>
+                        <li class="bold_text_container">
+                            <span class="container_text">地點：</span>
+                            <span class="text_var" id="text_place_var"></span>
+                        </li>
+                    </div>
+                </div>
+                <div class="icon_container">
+                    <img class="delete_icon" id="delete_icon" src="{{url_for('static', filename='images/icon_delete.png')}}" alt="delete-img" />
+                </div>
+        </div>
+        <div class="line"></div>
+        <div class="contact_data">
+                <div class="contact_container">
+                    <li class="text_title">您的聯絡資訊</li>
+                    <li class="lignt_text_container">
+                        <span class="contact_name">聯絡姓名：</span>
+                        <input class="input" id="contact_name_var"/>
+                    </li>
+                    <li class="lignt_text_container">
+                        <span class="contact_email">聯絡信箱：</span>
+                        <input class="input" id="contact_email_var"/>
+                    </li>
+                    <li class="lignt_text_container">
+                        <span class="contact_phone">手機號碼：</span>
+                        <input class="input" id="contact_phone_var"/>
+                    </li>
+                    <div class="contact_text">請保持手機暢通，準時到達，導覽人員將用手機與您聯繫，務必留下正確的聯絡方式。</div>
+                </div>
+        </div>
+        <div class="line"></div>
+        <div class="credit_data">
+            <div class="lignt_text_container">
+                    <li class="text_title">信用卡付款資訊</li>
+                    <li class="lignt_text_container taypay">
+                        <span class="credit_number">卡片號碼：</span>
+                        <div class="tpfield" id="card-number"></div>
+                    </li>
+                    <li class="lignt_text_container taypay">
+                        <span class="overtime_email">過期時間：</span>
+                        <div class="tpfield" id="card-expiration-date"></div>
+                    </li>
+                    <li class="lignt_text_container taypay">
+                        <span class="verify_password">驗證密碼：</span>
+                        <div class="tpfield" id="card-ccv"></div>
+                    </li>
+            </div>
+        </div>
+        <div class="line"></div>
+        <div class="check_container">
+                <div class="bold_text_container  total_pay" id="total_pay"></div>
+                <div type="button" class="check_button" id="check_button">
+                    <div class="check_text">確認訂購並付款</div>
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/booking.js')}}"></script>
+<script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/user.js')}}"></script>
+{% endblock %}

@@ -1,4 +1,3 @@
-const body=document.body
 const login_signin = document.getElementById("login-signin")
 const logout = document.getElementById("logout")
 
@@ -45,6 +44,11 @@ register_change.onclick=function(){
     register_change.classList.add("text_color")
     login.classList.add("show_block")
     register.classList.remove("show_block")
+    register_name.value=""
+    register_email.value=""
+    register_password.value=""
+    register_msg.textContent=""
+
 }
 
 //點擊其他地方，表單收起來
@@ -76,6 +80,7 @@ function checkLogin() {
         return response.json()
     }).then(function (data) {
         if (data["data"]!=null){
+            console.log(data)
             logout.classList.add("show_block")
             login_signin.classList.add("hide")
         }else{
@@ -119,15 +124,15 @@ function logSystem() {
 // 點擊登出網頁會導回首頁
 logout.addEventListener("click", function () {
     fetch(`/api/user/auth`, {method: 'DELETE'})
-    .then((res)=>{
-        return res.json()
+    .then(function (response){
+        return response.json()
     })
-    .then((data)=>{
+    .then(function (data){
         if(data["ok"]){
             location.href='/'
         }
     })
-    .catch((err)=>{
+    .catch(function (err){
     console.log("錯誤訊息",err)
     })
 })
@@ -188,12 +193,37 @@ function registerSuccess(){
         login.classList.add("show_block")
     }, 2000);
 }
-//預定行程
+//預定行程按鈕
 const tourbook=document.getElementById("tourbook")
 tourbook.addEventListener("click", function () { 
-    checkLogin()
-    if(logout){
-        location.href=`/api/booking`
-    }
-    
+    fetch(`/api/user/auth`)
+    .then(function (response) {
+        return response.json()
+    }).then(function (data) {
+        if (data["data"]!=null){
+            location.href=`/booking`
+        }else{
+            login.classList.add("show_block")
+            black_background.classList.add("show_block")
+        }
+    }).catch(function (err) {
+        console.log("錯誤訊息", err)
+    }) 
+})
+// 開始預預約行程按鈕
+const checkButton=document.getElementById("tourbook")
+checkButton.addEventListener("click", function () { 
+    fetch(`/api/user/auth`)
+    .then(function (response) {
+        return response.json()
+    }).then(function (data) {
+        if (data["data"]!=null){
+            location.href=`/booking`
+        }else{
+            login.classList.add("show_block")
+            black_background.classList.add("show_block")
+        }
+    }).catch(function (err) {
+        console.log("錯誤訊息", err)
+    }) 
 })

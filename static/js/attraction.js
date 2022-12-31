@@ -6,30 +6,21 @@ const morning = document.getElementById("morning")
 const afternoon = document.getElementById("afternoon")
 const price = document.getElementById("price")
 
-//監聽morining,afternoon
-function timeChoose() {
-    morning.addEventListener("click", function () {
-        price.textContent = "新台幣 2000 元"
-    })
-    afternoon.addEventListener("click", function () {
-        price.textContent = "新台幣 2500 元"
-    })
-}
+//點擊台北一日遊,回首頁
 const taipeibtn = document.getElementById("taipeibtn")
-        taipeibtn.onclick = function(){
-            location.href=`/`
-        }
+    taipeibtn.onclick = function(){
+        location.href=`/`
+    }
 
 const viewimg = document.getElementsByClassName("viewimg")[0]
-const viewtext_name = document.getElementsByClassName("viewtext-name")[0]
-const viewtext_cat_mrt = document.getElementsByClassName("viewtext-cat-mrt")[0]
-const veiw_describe = document.getElementsByClassName("veiw-describe")[0]
-const veiw_address_text = document.getElementsByClassName("veiw-address-text")[0]
-const veiw_traffic_text = document.getElementsByClassName("veiw-traffic-text")[0]
+const viewtext_name = document.getElementsByClassName("viewtext_name")[0]
+const viewtext_cat_mrt = document.getElementsByClassName("viewtext_cat_mrt")[0]
+const veiw_describe = document.getElementsByClassName("veiw_describe")[0]
+const veiw_address_text = document.getElementsByClassName("veiw_address_text")[0]
+const veiw_traffic_text = document.getElementsByClassName("veiw_traffic_text")[0]
 let images = []
 //取得頁面初始資料
 const getallData = function () {
-    console.log("iddata")
     let attractionId = attrId
     return fetch(`/api/attraction/${attractionId}`)
         .then(function (response) {
@@ -39,7 +30,7 @@ const getallData = function () {
             console.log(resultData)
             images = resultData.images
             getViewData(resultData)
-            timeChoose()
+            // timeChoose()
 
         }).catch(function (err) {
             console.log("錯誤訊息", err)
@@ -63,6 +54,56 @@ const getViewData = function (resultData) {
 
 }
 
+// 監聽morining,afternoon
+function handler(e){
+    const time=document.querySelector('input[name="time"]:checked').value
+    if (time== "morning"){
+        price.textContent = "新台幣 2000 元"
+    }else{
+        price.textContent = "新台幣 2500 元"
+    }
+    console.log(time)
+  }
+
+// 開始預預約行程按鈕
+const checktour_button=document.getElementById("checktour_button")
+checktour_button.addEventListener("click", function () { 
+    const date=document.getElementsByClassName("date")[0].value
+    const time=document.querySelector('input[name="time"]:checked').value
+    let basic_price=0
+    if (time== "morning"){
+        basic_price=2000
+    }else{
+        basic_price=2500
+    }
+
+    fetch(`/api/booking`,{
+        method: "POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            attractionId: attrId,
+            date: date,
+            time: time,
+            price: basic_price
+        })
+    }).then(function (response) {
+        if (response.status==403 ){
+            login.classList.add("show_block")
+            black_background.classList.add("show_block")
+        }
+        console.log(response)
+        return response.json()
+    }).then(function (data) {
+        console.log(data)
+        if (data["ok"]){
+            location.href=`/booking`
+        }
+    }).catch(function (err) {
+        console.log("錯誤訊息", err)
+    })
+    
+})
+
 //連播圖片
 function allsrc(index) {
     let mySlidesDiv = document.createElement("div")
@@ -72,7 +113,7 @@ function allsrc(index) {
     mySlides_img.setAttribute("src", images[index])
     mySlides_img.setAttribute("alt", "mySlides_img")
 
-    const slideshow_container = document.getElementById("slideshow-container")
+    const slideshow_container = document.getElementById("slideshow_container")
     slideshow_container.appendChild(mySlidesDiv).appendChild(mySlides_img)
 
     let dotSpan = document.createElement("span")
