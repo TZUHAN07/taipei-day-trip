@@ -23,7 +23,7 @@ load_dotenv()
 
 dbconfig = {
     "host": "localhost",
-    "user": os.getenv("user"),
+    "user": "root",
     "password": os.getenv("password"),
     "database": "tpdaywebsite",
 }
