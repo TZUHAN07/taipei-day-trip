@@ -1,0 +1,113 @@
+/* base 樣式 */
+* {
+    font-family: "Noto Sans TC", sans-serif;
+}
+body {
+    margin: 0 auto;
+    padding: 0 auto;
+    position: relative; 
+    color: #666666;  
+}
+
+nav {
+    position: sticky; 
+    top: 0px;
+    height:54px;
+    background-color: #FFFFFF;
+    z-index: 99;
+}
+.top{
+    display: flex; 
+    width:1200px;
+    margin:auto;
+    justify-content: space-between;
+}
+.top-left{
+    width:150px;
+    height:34px;
+    flex: auto;
+    margin: 10px 0px 10px 10px;
+    font-size: 30px;
+    line-height: 34px;
+    color:#448899;
+    cursor: pointer; 
+   
+}
+.top-right{
+    margin: 10px ;
+    display: flex;
+    color: #757575;
+}
+.tourbook{
+    width:64px;
+    height:14px;
+    margin: 10px 10px 10px 0px;
+    font-size: 16px;
+    line-height: 13px;
+    cursor: pointer; 
+}
+.login-out{
+    width:72px;
+    height:14px;
+    margin: 10px 0px 10px 10px;
+    font-size: 16px;
+    line-height: 13px;
+    cursor: pointer; 
+}
+.top-line{
+    width: 100%;
+    border: 1px solid #E8E8E8;
+}
+.footer{
+    width:100%;
+    height: 104px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    background-color: #757575;
+}
+.footer_text{
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 13px;
+}
+.nodata{
+    padding-bottom: 820px;
+}
+
+.order_data{
+    width:980px;
+    margin:auto;
+    align-items: center;
+    flex-direction: column;
+    display:flex;
+}
+.order_text{
+    padding:40px ;
+    align-items: center;
+    flex-direction: column;
+    display: flex;
+}
+.bold_center_data{
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 15px;
+    padding:10px 0px;
+    
+}
+.light_center_data{
+    font-size: 16px;
+    line-height: 13px;
+    padding:20px 0px 40px  0px;
+
+}
+@media(max-width:1200px) {
+    .top,.viewinfro,.order_data{
+        width:100%;
+    }
+    
+    .line{
+        width: 900px;
+    } 
+}

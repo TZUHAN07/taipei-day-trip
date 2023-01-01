@@ -1,0 +1,22 @@
+{% extends "index.html" %}
+{% block title %}感謝訂購-台北一日遊{% endblock %}
+{% block head %}
+<link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/thankyou.css')}}" />
+<link rel="stylesheet" type=text/css href="{{url_for('static', filename='css/user.css')}}" />
+{% endblock %}
+
+{% block main %}
+<div class="order_data">
+    <div class="order_text">
+        <div class="bold_center_data">行程預定成功</div>
+        <div class="bold_center_data">您的訂單編號如下</div>
+    </div>
+    <div class="light_center_data" id="order_number"></div>
+    <div class="light_center_data">請記住此編號，或到會員中心查詢歷史訂單</div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/thankyou.js')}}"></script>
+<script rel="stylesheet" type=text/javascript src="{{url_for('static', filename='js/user.js')}}"></script>
+{% endblock %}
